@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
 <title>톡톡영어 — Sunny와 5분 통화</title>
-<meta name="description" content="Sunny와 하루 5분 영어회화 — 목표별 트랙, 자동 통화 롤플레이, 오늘의 토픽 자유 스피킹, 유창성 점수, 간격반복 복습.">
-<meta property="og:title" content="톡톡영어 — Sunny와 5분 통화">
-<meta property="og:description" content="목표를 고르면 Sunny가 딱 맞는 5분 영어 통화를 추천해요.">
+<meta name="description" content="초대된 분들만 쓸 수 있는 5분 영어회화 앱.">
 <meta name="theme-color" content="#fff9f1">
 </head>
 <body>
@@ -234,6 +233,23 @@
     background:#fffcf7;color:var(--ink);max-width:180px}
   .btn-danger{width:100%;text-align:center;color:var(--red);font-weight:700;font-size:14.5px;padding:14px}
   .set-note{font-size:12.5px;color:var(--muted);margin:4px 6px 0}
+
+  /* ---------- lock (초대 코드) ---------- */
+  .lock{position:fixed;inset:0;z-index:120;background:linear-gradient(170deg,#fff9f1,#ffedd8 55%,#ffdfc0);
+    display:none;align-items:center;justify-content:center;padding:24px}
+  .lock.show{display:flex}
+  .lock-box{max-width:340px;width:100%;text-align:center}
+  .lock-emma{width:110px;height:110px;object-fit:contain;margin:0 auto 12px;display:block;
+    filter:drop-shadow(0 10px 20px rgba(90,50,15,.25))}
+  .lock-t{font-size:20px;font-weight:800;color:var(--head);margin-bottom:6px}
+  .lock-d{font-size:13.5px;color:var(--sub);margin-bottom:20px}
+  .lock-in{width:100%;text-align:center;font-size:26px;font-weight:800;letter-spacing:.35em;
+    padding:14px;border:2px solid #f0d2b2;border-radius:18px;background:#fffcf7;color:var(--head);
+    font-variant-numeric:tabular-nums}
+  .lock-in:focus{outline:none;border-color:var(--accent)}
+  .lock-in.no{border-color:var(--red);animation:shake .3s}
+  @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .lock-err{font-size:12.5px;color:var(--red);font-weight:700;min-height:18px;margin-top:8px}
 
   /* ---------- onboarding ---------- */
   .onboard{position:fixed;inset:0;z-index:90;background:linear-gradient(170deg,#fff9f1,#ffedd8 55%,#ffdfc0);
@@ -502,6 +518,18 @@
       설정
     </button>
   </nav>
+
+  <!-- ============ LOCK (초대 코드) ============ -->
+  <div class="lock" id="lockScr">
+    <div class="lock-box">
+      <img class="lock-emma" id="lockEmma" alt="Sunny">
+      <div class="lock-t">초대받으셨나요?</div>
+      <div class="lock-d">이 앱은 초대된 분들만 쓸 수 있어요.<br>전달받은 입장 코드를 입력해 주세요.</div>
+      <input class="lock-in" id="lockIn" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="····">
+      <div class="lock-err" id="lockErr"></div>
+      <button class="btn-main" id="lockGo" style="width:100%;margin-top:8px">들어가기</button>
+    </div>
+  </div>
 
   <!-- ============ ONBOARDING ============ -->
   <div class="onboard" id="onboard">
@@ -2071,6 +2099,30 @@ $('#btnSoundTest').addEventListener('click', ()=>{
     $('#inappBanner').classList.remove('show');
     store.set('inappDismiss', true);
   });
+})();
+
+/* ================= LOCK (초대 코드) ================= */
+(function(){
+  const HASH = 2085709505;              // 입장 코드의 djb2 해시 (코드 원문은 저장하지 않음)
+  const djb2 = s=>{ let x=5381; for(const c of s) x = ((Math.imul(x,33))^c.charCodeAt(0))>>>0; return x; };
+  if(store.get('unlock', false)) return;
+  $('#lockEmma').src = SUNNY_IDLE;
+  $('#lockScr').classList.add('show');
+  const tryGo = ()=>{
+    const v = $('#lockIn').value.trim();
+    if(djb2(v) === HASH){
+      store.set('unlock', true);
+      $('#lockScr').classList.remove('show');
+      toast('환영해요! Sunny가 기다리고 있었어요');
+    } else {
+      const inp = $('#lockIn');
+      inp.classList.remove('no'); void inp.offsetWidth; inp.classList.add('no');
+      $('#lockErr').textContent = '코드가 맞지 않아요. 다시 확인해 주세요.';
+      inp.value = ''; inp.focus();
+    }
+  };
+  $('#lockGo').addEventListener('click', tryGo);
+  $('#lockIn').addEventListener('keydown', e=>{ if(e.key==='Enter') tryGo(); });
 })();
 
 /* ================= ONBOARDING ================= */
