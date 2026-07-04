@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
 <title>톡톡영어 — Sunny와 5분 통화</title>
-<meta name="description" content="초대된 분들만 쓸 수 있는 5분 영어회화 앱.">
-<meta name="theme-color" content="#fff9f1">
+<meta name="description" content="설치·로그인·비용 없이 브라우저에서 바로 — Sunny와 5분 영어 통화, 자동 롤플레이, 간격반복 복습, 나만의 상황 만들기.">
+<meta property="og:title" content="톡톡영어 — Sunny와 5분 통화">
+<meta property="og:description" content="목표를 고르면 Sunny가 딱 맞는 5분 영어 통화를 추천해요.">
+<meta name="theme-color" content="#FAF6EF">
 </head>
 <body>
 <style>
   :root{
-    --bg:#fff3e2; --ink:#4a3524; --head:#6f4322; --sub:#8f6a4a; --muted:#b3906e; --line:#f3ddc4;
-    --card:rgba(255,252,247,.9); --accent:#ee7433; --accent-deep:#d05a1e; --accent-soft:#ffe9d6;
+    --bg:#FAF6EF; --ink:#3A2E20; --head:#6f4322; --sub:#8f6a4a; --muted:#b3906e; --line:#f3ddc4;
+    --card:#FFFFFF; --accent:#ee7433; --accent-deep:#d05a1e; --accent-soft:#ffe9d6;
     --grad:linear-gradient(135deg,#ffb25e,#ee7433);
     --red:#d64040; --green:#2c6b3a; --gold:#c98a16;
     --shadow:0 6px 20px rgba(90,50,15,.1);
@@ -20,14 +21,13 @@
     --font-en:ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;padding:0;background:#ffedd8}
-  body{font-family:var(--font-kr);color:var(--ink);line-height:1.55;font-size:16px;
-    background:linear-gradient(170deg,#fff9f1,#ffedd8 55%,#ffdfc0) fixed}
+  html,body{margin:0;padding:0;background:#FAF6EF}
+  body{font-family:var(--font-kr);color:var(--ink);line-height:1.55;font-size:16px;background:#FAF6EF}
   button{font-family:inherit;font-size:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
   #frame{max-width:430px;margin:0 auto;min-height:100dvh;position:relative}
   @media (min-width:500px){ #frame{border-left:1px solid var(--line);border-right:1px solid var(--line)} }
 
-  .screen{display:none;padding:20px 20px calc(84px + env(safe-area-inset-bottom));min-height:100vh;min-height:100dvh}
+  .screen{display:none;padding:20px 20px calc(108px + env(safe-area-inset-bottom));min-height:100vh;min-height:100dvh}
   .screen.on{display:block}
 
   .inapp-banner{display:none;background:#fff2d6;border:1.5px solid #f2cf8e;border-radius:16px;
@@ -46,28 +46,32 @@
   .streak b{color:var(--accent-deep);font-variant-numeric:tabular-nums}
 
   /* ---------- call card (hero) ---------- */
-  .callcard{background:var(--card);border-radius:30px;padding:20px 20px 18px;
-    margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(90,50,15,.14)}
-  .callcard::before{content:"";position:absolute;left:-30px;bottom:-46px;width:110px;height:110px;
-    border-radius:50%;background:var(--accent-soft);opacity:.75}
-  .callcard::after{content:"";position:absolute;left:62px;bottom:-58px;width:78px;height:78px;
-    border-radius:50%;background:var(--accent-soft);opacity:.5}
+  .callcard{background:linear-gradient(160deg,#33251A,#2B1F16 70%);border-radius:28px;padding:22px 20px 18px;
+    margin-bottom:22px;position:relative;overflow:hidden;box-shadow:0 14px 34px rgba(43,31,22,.35)}
+  .callcard::before{content:"";position:absolute;left:-30px;bottom:-46px;width:120px;height:120px;
+    border-radius:50%;background:rgba(238,116,51,.14)}
+  .callcard::after{content:"";position:absolute;left:66px;bottom:-58px;width:80px;height:80px;
+    border-radius:50%;background:rgba(238,116,51,.08)}
   .callcard>*{position:relative;z-index:1}
   .call-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
   .cc-txt{flex:1;min-width:0}
-  .cc-knock{display:inline-block;background:var(--accent-soft);color:var(--accent-deep);
+  .cc-knock{display:inline-block;background:rgba(238,116,51,.22);color:#FFB25E;
     font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;margin-bottom:8px;
     animation:wiggle 2.8s ease-in-out infinite;transform-origin:50% 100%}
   @keyframes wiggle{0%,70%,100%{transform:rotate(0)}76%{transform:rotate(-4deg)}82%{transform:rotate(4deg)}88%{transform:rotate(-2deg)}94%{transform:rotate(0)}}
   @media (prefers-reduced-motion:reduce){ .cc-knock{animation:none} }
-  .call-name{font-weight:800;font-size:20px;color:var(--head)}
-  .call-status{font-size:13px;color:var(--sub)}
-  .call-topic{font-size:14px;color:var(--sub);margin-top:10px}
-  .call-topic b{font-size:15.5px;color:var(--head)}
+  .call-name{font-weight:800;font-size:21px;color:#FFF6EC}
+  .call-status{font-size:13px;color:#C9B39E}
+  .call-topic{font-size:13.5px;color:#A8927D;margin-top:10px}
+  .call-topic b{font-size:15.5px;color:#FFD9B0}
   .cc-emma{width:128px;height:128px;flex:none;object-fit:contain;margin:-6px -20px -10px 0;
     filter:drop-shadow(0 10px 20px rgba(90,50,15,.25));animation:bob 3s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
   @media (prefers-reduced-motion:reduce){ .cc-emma{animation:none} }
+  .cc-stats{display:flex;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;padding-top:13px}
+  .cc-stat{flex:1;text-align:center}
+  .cc-stat b{display:block;font-size:18px;color:#FFB25E;font-variant-numeric:tabular-nums}
+  .cc-stat span{font-size:11px;color:#A8927D;font-weight:700}
   .btn-call{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
     background:var(--grad);color:#fff;font-weight:800;font-size:17px;
     border-radius:20px;padding:15px;transition:transform .08s,box-shadow .08s;
@@ -78,11 +82,16 @@
   /* ---------- session list ---------- */
   .sec-label{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--sub);
     text-transform:uppercase;margin:0 0 10px 4px}
+  .track-head{display:flex;align-items:center;gap:10px;margin:20px 4px 10px}
+  .track-head .tn{font-size:14px;font-weight:800;color:var(--head);flex:none}
+  .track-head .tbar{flex:1;height:6px;border-radius:3px;background:#F0E4D2;overflow:hidden}
+  .track-head .tbar i{display:block;height:100%;border-radius:3px;background:var(--grad)}
+  .track-head .tc{font-size:11.5px;font-weight:800;color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
   .slist{display:flex;flex-direction:column;gap:10px}
   .srow{display:flex;align-items:center;gap:14px;background:var(--card);
-    border-radius:22px;padding:14px 16px;text-align:left;width:100%;transition:transform .1s;box-shadow:var(--shadow)}
+    border-radius:18px;padding:13px 15px;text-align:left;width:100%;transition:transform .1s;box-shadow:var(--shadow)}
   .srow:active{transform:scale(.98)}
-  .snum{width:42px;height:42px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  .snum{width:42px;height:42px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
     background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:14.5px;
     font-variant-numeric:tabular-nums}
   .srow.done .snum{background:var(--grad);color:#fff}
@@ -93,18 +102,18 @@
   .srow.done .srow-tag{color:var(--accent-deep);border-color:var(--accent-soft);background:var(--accent-soft)}
 
   /* ---------- bottom nav ---------- */
-  nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;
-    background:rgba(255,250,244,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);
-    display:flex;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:40}
-  nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-    font-size:11px;font-weight:700;color:var(--muted);padding:6px 0;border-radius:12px}
-  nav button.on{color:var(--accent-deep)}
+  nav{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+    width:calc(100% - 48px);max-width:360px;background:#2B1F16;border-radius:999px;
+    display:flex;padding:8px 12px;z-index:40;box-shadow:0 10px 26px rgba(43,31,22,.4)}
+  nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    font-size:10.5px;font-weight:700;color:#8A7461;padding:7px 0;border-radius:999px}
+  nav button.on{color:#FFB25E}
   nav button svg{width:23px;height:23px}
   nav.hidden{display:none}
 
   /* ---------- session player ---------- */
   #sess{padding:0 0 calc(20px + env(safe-area-inset-bottom))}
-  .shead{position:sticky;top:0;z-index:30;background:rgba(255,249,241,.94);backdrop-filter:blur(10px);
+  .shead{position:sticky;top:0;z-index:30;background:rgba(250,246,239,.94);backdrop-filter:blur(10px);
     padding:14px 16px 10px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
   .btn-x{width:38px;height:38px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);
     display:flex;align-items:center;justify-content:center;flex:none;color:var(--head)}
@@ -148,7 +157,7 @@
   .msg .ko{font-family:var(--font-kr);font-weight:400;font-size:12.5px;color:var(--sub);margin:0 6px}
   .msg.speaking .bubble{box-shadow:0 0 0 2px var(--accent)}
   .playall{position:sticky;bottom:12px;display:flex;justify-content:center;margin-top:16px}
-  .playall button{display:flex;align-items:center;gap:8px;background:#3f2a18;color:#ffedd8;
+  .playall button{display:flex;align-items:center;gap:8px;background:#2B1F16;color:#ffedd8;
     font-weight:700;font-size:14.5px;border-radius:999px;padding:12px 22px;box-shadow:0 6px 18px rgba(40,25,12,.3)}
   .playall button.playing{background:var(--red)}
 
@@ -212,7 +221,11 @@
     border-radius:20px;padding:13px 15px;margin-bottom:8px;width:100%;text-align:left;box-shadow:var(--shadow)}
   .rev-item .en{font-family:var(--font-en);font-weight:700;font-size:15.5px;color:var(--head)}
   .rev-item .ko{font-size:12.5px;color:var(--sub)}
-  .rev-play{margin-left:auto;flex:none;width:36px;height:36px;border-radius:50%;
+  .rev-lv{flex:none;font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 8px;
+    background:var(--accent-soft);color:var(--accent-deep);margin-left:auto}
+  .rev-lv.max{background:#E9F3E6;color:var(--green)}
+  .rev-due{font-size:11px;color:var(--muted)}
+  .rev-play{flex:none;width:36px;height:36px;border-radius:50%;
     background:var(--accent-soft);color:var(--accent-deep);display:flex;align-items:center;justify-content:center}
 
   /* ---------- settings ---------- */
@@ -234,25 +247,8 @@
   .btn-danger{width:100%;text-align:center;color:var(--red);font-weight:700;font-size:14.5px;padding:14px}
   .set-note{font-size:12.5px;color:var(--muted);margin:4px 6px 0}
 
-  /* ---------- lock (초대 코드) ---------- */
-  .lock{position:fixed;inset:0;z-index:120;background:linear-gradient(170deg,#fff9f1,#ffedd8 55%,#ffdfc0);
-    display:none;align-items:center;justify-content:center;padding:24px}
-  .lock.show{display:flex}
-  .lock-box{max-width:340px;width:100%;text-align:center}
-  .lock-emma{width:110px;height:110px;object-fit:contain;margin:0 auto 12px;display:block;
-    filter:drop-shadow(0 10px 20px rgba(90,50,15,.25))}
-  .lock-t{font-size:20px;font-weight:800;color:var(--head);margin-bottom:6px}
-  .lock-d{font-size:13.5px;color:var(--sub);margin-bottom:20px}
-  .lock-in{width:100%;text-align:center;font-size:26px;font-weight:800;letter-spacing:.35em;
-    padding:14px;border:2px solid #f0d2b2;border-radius:18px;background:#fffcf7;color:var(--head);
-    font-variant-numeric:tabular-nums}
-  .lock-in:focus{outline:none;border-color:var(--accent)}
-  .lock-in.no{border-color:var(--red);animation:shake .3s}
-  @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-  .lock-err{font-size:12.5px;color:var(--red);font-weight:700;min-height:18px;margin-top:8px}
-
   /* ---------- onboarding ---------- */
-  .onboard{position:fixed;inset:0;z-index:90;background:linear-gradient(170deg,#fff9f1,#ffedd8 55%,#ffdfc0);
+  .onboard{position:fixed;inset:0;z-index:90;background:#FAF6EF;
     display:none;overflow-y:auto;padding:36px 24px calc(30px + env(safe-area-inset-bottom))}
   .onboard.show{display:block}
   .ob-inner{max-width:430px;margin:0 auto}
@@ -353,8 +349,8 @@
     border:1.5px solid #f0d2b2;border-radius:999px;padding:5px 11px}
   .srow-del.armed{color:#fff;background:var(--red);border-color:var(--red)}
 
-  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom));
-    background:#3f2a18;color:#ffedd8;font-size:13.5px;font-weight:700;border-radius:999px;
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(118px + env(safe-area-inset-bottom));
+    background:#2B1F16;color:#ffedd8;font-size:13.5px;font-weight:700;border-radius:999px;
     padding:10px 18px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s;z-index:60;white-space:nowrap}
   .toast.show{opacity:1;visibility:visible}
 </style>
@@ -371,10 +367,6 @@
     </div>
     <div class="topbar">
       <div class="brand">톡톡<em>영어</em></div>
-      <div class="chips-top">
-        <div class="fluency" id="fluencyChip">유창성 <b id="fluencyN">–</b></div>
-        <div class="streak">연속 <b id="streakN">0</b>일</div>
-      </div>
     </div>
 
     <div class="callcard">
@@ -386,6 +378,11 @@
           <div class="call-topic">오늘의 세션<br><b id="todayTitle"></b></div>
         </div>
         <img class="cc-emma" id="ccEmma" src="data:image/webp;base64,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" alt="노크하는 Sunny">
+      </div>
+      <div class="cc-stats">
+        <div class="cc-stat"><b id="heroFluency">–</b><span>유창성</span></div>
+        <div class="cc-stat"><b id="heroStreak">0</b><span>연속일</span></div>
+        <div class="cc-stat"><b id="heroDone">0</b><span>완료 세션</span></div>
       </div>
       <button class="btn-call" id="btnCall">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
@@ -518,18 +515,6 @@
       설정
     </button>
   </nav>
-
-  <!-- ============ LOCK (초대 코드) ============ -->
-  <div class="lock" id="lockScr">
-    <div class="lock-box">
-      <img class="lock-emma" id="lockEmma" alt="Sunny">
-      <div class="lock-t">초대받으셨나요?</div>
-      <div class="lock-d">이 앱은 초대된 분들만 쓸 수 있어요.<br>전달받은 입장 코드를 입력해 주세요.</div>
-      <input class="lock-in" id="lockIn" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="····">
-      <div class="lock-err" id="lockErr"></div>
-      <button class="btn-main" id="lockGo" style="width:100%;margin-top:8px">들어가기</button>
-    </div>
-  </div>
 
   <!-- ============ ONBOARDING ============ -->
   <div class="onboard" id="onboard">
@@ -1337,7 +1322,8 @@ function sunnyMood(){
   return days>=4 ? 'angry' : days>=2 ? 'pout' : 'happy';
 }
 function renderHome(){
-  $('#streakN').textContent = streak;
+  $('#heroStreak').textContent = streak;
+  $('#heroDone').textContent = doneIds.length;
   const t = todaySession();
   $('#todayTitle').textContent = t.title;
   const h = new Date().getHours();
@@ -1357,17 +1343,19 @@ function renderHome(){
     $('#callStatus').textContent = h<12 ? '좋은 아침이에요! 통화할까요?' : h<18 ? '지금 통화할 수 있어요' : '자기 전 5분, 어때요?';
   }
   const fv = fluencyVal();
-  $('#fluencyN').textContent = fv===null ? '측정 중' : fv;
+  $('#heroFluency').textContent = fv===null ? '–' : fv;
   renderTopicCard();
   const list = $('#sessionList'); list.innerHTML = '';
   trackOrder().forEach(tr=>{
     const track = TRACKS.find(t=>t.id===tr);
     const items = SESSIONS.filter(s=>s.tr===tr);
     if(!items.length) return;
-    const lab = document.createElement('p');
-    lab.className = 'sec-label';
-    lab.style.margin = '16px 0 10px 4px';
-    lab.textContent = track.name;
+    const doneN = items.filter(s=>doneIds.includes(s.id)).length;
+    const lab = document.createElement('div');
+    lab.className = 'track-head';
+    lab.innerHTML = `<span class="tn">${track.name}</span>
+      <span class="tbar"><i style="width:${Math.round(doneN/items.length*100)}%"></i></span>
+      <span class="tc">${doneN}/${items.length}</span>`;
     list.appendChild(lab);
     items.forEach((s,i)=>{
       const done = doneIds.includes(s.id);
@@ -1992,6 +1980,38 @@ function startRevQuiz(){
       opts.appendChild(o);
     });
     box.appendChild(opts);
+    if(SR){
+      const fb = document.createElement('div');
+      fb.className = 'rp-fb'; fb.style.marginTop = '12px';
+      const mic = document.createElement('button');
+      mic.className = 'chipbtn mic'; mic.style.marginTop = '12px';
+      mic.textContent = '말해서 답하기';
+      let rec = null;
+      mic.addEventListener('click', ()=>{
+        if(rec){ try{rec.abort();}catch(e){} rec=null; mic.classList.remove('live'); mic.textContent='말해서 답하기'; return; }
+        stopSpeak();
+        rec = new SR();
+        rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
+        mic.classList.add('live'); mic.textContent='듣는 중…';
+        rec.onresult = e=>{
+          const said = e.results[0][0].transcript;
+          const r = wordDiff(said, it.en);
+          addScore(r.score);
+          if(r.score>=60 && !opts.dataset.lock){
+            const correctBtn = Array.from(opts.children).find(x=>x.textContent===it.en);
+            if(correctBtn) correctBtn.click();
+          } else {
+            fb.className='rp-fb retry';
+            fb.innerHTML=`${r.score}점 — 아깝네요! <span class="shadow-target" style="display:block">${r.html}</span><span class="rp-heard">들린 말: “${said}”</span>`;
+          }
+        };
+        rec.onend = ()=>{ rec=null; mic.classList.remove('live'); mic.textContent='말해서 답하기'; };
+        rec.onerror = ()=>{ rec=null; mic.classList.remove('live'); mic.textContent='말해서 답하기'; };
+        try{ rec.start(); }catch(e){ rec=null; mic.classList.remove('live'); mic.textContent='말해서 답하기'; }
+      });
+      box.appendChild(mic);
+      box.appendChild(fb);
+    }
     el.appendChild(box);
   };
   drawQ();
@@ -2032,7 +2052,10 @@ function renderReview(){
     bySess[sid].forEach(l=>{
       const it = document.createElement('button');
       it.className='rev-item';
-      it.innerHTML = `<span><span class="en">${l.en}</span><br><span class="ko">${l.ko}</span></span>
+      const lv = l.box || 0;
+      it.innerHTML = `<span><span class="en">${l.en}</span><br><span class="ko">${l.ko}</span>
+        <span class="rev-due"> · 다음 복습 ${l.due||'-'}</span></span>
+        <span class="rev-lv${lv>=5?' max':''}">Lv.${lv}</span>
         <span class="rev-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>`;
       it.addEventListener('click', ()=>speak(l.en));
       g.appendChild(it);
@@ -2099,30 +2122,6 @@ $('#btnSoundTest').addEventListener('click', ()=>{
     $('#inappBanner').classList.remove('show');
     store.set('inappDismiss', true);
   });
-})();
-
-/* ================= LOCK (초대 코드) ================= */
-(function(){
-  const HASH = 2085709505;              // 입장 코드의 djb2 해시 (코드 원문은 저장하지 않음)
-  const djb2 = s=>{ let x=5381; for(const c of s) x = ((Math.imul(x,33))^c.charCodeAt(0))>>>0; return x; };
-  if(store.get('unlock', false)) return;
-  $('#lockEmma').src = SUNNY_IDLE;
-  $('#lockScr').classList.add('show');
-  const tryGo = ()=>{
-    const v = $('#lockIn').value.trim();
-    if(djb2(v) === HASH){
-      store.set('unlock', true);
-      $('#lockScr').classList.remove('show');
-      toast('환영해요! Sunny가 기다리고 있었어요');
-    } else {
-      const inp = $('#lockIn');
-      inp.classList.remove('no'); void inp.offsetWidth; inp.classList.add('no');
-      $('#lockErr').textContent = '코드가 맞지 않아요. 다시 확인해 주세요.';
-      inp.value = ''; inp.focus();
-    }
-  };
-  $('#lockGo').addEventListener('click', tryGo);
-  $('#lockIn').addEventListener('keydown', e=>{ if(e.key==='Enter') tryGo(); });
 })();
 
 /* ================= ONBOARDING ================= */
