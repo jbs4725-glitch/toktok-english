@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>톡톡영어 — Sunny와 5분 통화</title>
+<meta name="description" content="Sunny와 하루 5분 영어회화 — 오늘의 표현, 대화 듣기, 롤플레이, 퀴즈까지 핸드폰으로.">
+<meta property="og:title" content="톡톡영어 — Sunny와 5분 통화">
+<meta property="og:description" content="Sunny와 하루 5분 영어회화 — 핸드폰으로 표현·대화·롤플레이·퀴즈.">
+<meta name="theme-color" content="#fff6f4">
+</head>
+<body>
+<style>
+  :root{
+    --bg:#fff3f3; --ink:#4a2c34; --head:#6b3547; --sub:#8a5c6b; --muted:#b08a9a; --line:#f2d9e0;
+    --card:rgba(255,251,251,.9); --accent:#e84a6f; --accent-deep:#c2355e; --accent-soft:#ffe4ec;
+    --grad:linear-gradient(135deg,#ff8fa3,#e84a6f);
+    --red:#d64040; --green:#2c6b3a; --gold:#c98a16;
+    --shadow:0 6px 20px rgba(70,30,45,.1);
+    --font-kr:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+    --font-en:ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:#ffe2e4}
+  body{font-family:var(--font-kr);color:var(--ink);line-height:1.55;font-size:16px;
+    background:linear-gradient(170deg,#fff6f4,#ffe2e4 55%,#ffd3da) fixed}
+  button{font-family:inherit;font-size:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+  #frame{max-width:430px;margin:0 auto;min-height:100dvh;position:relative}
+  @media (min-width:500px){ #frame{border-left:1px solid var(--line);border-right:1px solid var(--line)} }
+
+  .screen{display:none;padding:20px 20px calc(84px + env(safe-area-inset-bottom));min-height:100dvh}
+  .screen.on{display:block}
+
+  /* ---------- top bar ---------- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .brand{font-weight:800;font-size:20px;letter-spacing:-.02em;color:var(--head)}
+  .brand em{font-style:normal;color:var(--accent)}
+  .streak{display:flex;align-items:center;gap:6px;background:var(--card);
+    border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--sub);box-shadow:var(--shadow)}
+  .streak b{color:var(--accent-deep);font-variant-numeric:tabular-nums}
+
+  /* ---------- call card (hero) ---------- */
+  .callcard{background:var(--card);border-radius:24px;padding:20px 20px 18px;
+    margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(70,30,45,.14)}
+  .call-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .cc-txt{flex:1;min-width:0}
+  .cc-knock{display:inline-block;background:var(--accent-soft);color:var(--accent-deep);
+    font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;margin-bottom:8px}
+  .call-name{font-weight:800;font-size:20px;color:var(--head)}
+  .call-status{font-size:13px;color:var(--sub)}
+  .call-topic{font-size:14px;color:var(--sub);margin-top:10px}
+  .call-topic b{font-size:15.5px;color:var(--head)}
+  .cc-emma{width:128px;height:128px;flex:none;object-fit:contain;margin:-6px -20px -10px 0;
+    filter:drop-shadow(0 10px 20px rgba(70,30,45,.25));animation:bob 3s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+  @media (prefers-reduced-motion:reduce){ .cc-emma{animation:none} }
+  .btn-call{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    background:var(--grad);color:#fff;font-weight:800;font-size:17px;
+    border-radius:16px;padding:15px;transition:transform .1s;box-shadow:0 8px 24px rgba(232,74,111,.4)}
+  .btn-call:active{transform:scale(.97)}
+  .btn-call svg{flex:none}
+
+  /* ---------- session list ---------- */
+  .sec-label{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--sub);
+    text-transform:uppercase;margin:0 0 10px 4px}
+  .slist{display:flex;flex-direction:column;gap:10px}
+  .srow{display:flex;align-items:center;gap:14px;background:var(--card);
+    border-radius:18px;padding:14px 16px;text-align:left;width:100%;transition:transform .1s;box-shadow:var(--shadow)}
+  .srow:active{transform:scale(.98)}
+  .snum{width:40px;height:40px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:15px;
+    font-variant-numeric:tabular-nums}
+  .srow.done .snum{background:var(--grad);color:#fff}
+  .srow-t{font-weight:700;font-size:15.5px;color:var(--head)}
+  .srow-d{font-size:13px;color:var(--sub)}
+  .srow-tag{margin-left:auto;flex:none;font-size:11.5px;font-weight:700;color:var(--sub);
+    border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+  .srow.done .srow-tag{color:var(--accent-deep);border-color:var(--accent-soft);background:var(--accent-soft)}
+
+  /* ---------- bottom nav ---------- */
+  nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;
+    background:rgba(255,248,249,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+    display:flex;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:40}
+  nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:11px;font-weight:700;color:var(--muted);padding:6px 0;border-radius:12px}
+  nav button.on{color:var(--accent-deep)}
+  nav button svg{width:23px;height:23px}
+  nav.hidden{display:none}
+
+  /* ---------- session player ---------- */
+  #sess{padding:0 0 calc(20px + env(safe-area-inset-bottom))}
+  .shead{position:sticky;top:0;z-index:30;background:rgba(255,246,246,.94);backdrop-filter:blur(10px);
+    padding:14px 16px 10px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+  .btn-x{width:38px;height:38px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:center;flex:none;color:var(--head)}
+  .shead-t{font-weight:800;font-size:16px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--head)}
+  .timer{display:flex;align-items:center;gap:7px;flex:none}
+  .timer svg{transform:rotate(-90deg)}
+  .timer-txt{font-size:13px;font-weight:800;color:var(--accent-deep);font-variant-numeric:tabular-nums;min-width:38px}
+  .timer.over .timer-txt{color:var(--red)}
+  .steps{display:flex;gap:5px;padding:12px 20px 4px}
+  .steps i{flex:1;height:4px;border-radius:2px;background:#f3d7dd}
+  .steps i.on{background:var(--accent)}
+  .step-label{padding:10px 20px 2px;font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--accent-deep)}
+  .sbody{padding:8px 20px 20px}
+
+  /* expressions step */
+  .expcard{background:var(--card);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .exp-en{font-family:var(--font-en);font-weight:800;font-size:21px;line-height:1.35;letter-spacing:-.01em;
+    text-wrap:balance;margin-bottom:6px;color:var(--head)}
+  .exp-ko{font-size:15px;color:var(--sub);margin-bottom:12px}
+  .exp-note{font-size:13.5px;background:var(--accent-soft);color:var(--accent-deep);
+    border-radius:12px;padding:10px 12px;margin-bottom:12px}
+  .exp-ex{border-top:1px dashed var(--line);padding-top:12px;font-size:14px}
+  .exp-ex .en{font-family:var(--font-en);font-weight:600}
+  .exp-ex .ko{color:var(--sub);font-size:13px}
+  .btn-listen{display:inline-flex;align-items:center;gap:7px;background:var(--grad);color:#fff;
+    font-weight:700;font-size:14px;border-radius:999px;padding:9px 16px;margin-top:4px;
+    box-shadow:0 4px 14px rgba(232,74,111,.35)}
+  .btn-listen:active{opacity:.85}
+  .btn-listen.playing{background:#a8492a;box-shadow:none}
+
+  /* dialogue step */
+  .chat{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
+  .msg{max-width:82%;display:flex;flex-direction:column;gap:3px}
+  .msg .who{font-size:11.5px;font-weight:800;color:var(--sub);letter-spacing:.04em;margin:0 6px}
+  .bubble{border-radius:18px;padding:11px 15px;font-family:var(--font-en);font-weight:600;
+    font-size:16px;line-height:1.45;cursor:pointer}
+  .msg.e{align-self:flex-start}
+  .msg.e .bubble{background:#fffbfb;box-shadow:var(--shadow);border-bottom-left-radius:6px;color:var(--ink)}
+  .msg.y{align-self:flex-end;align-items:flex-end}
+  .msg.y .bubble{background:var(--accent-soft);border:1px solid #f7c8d3;border-bottom-right-radius:6px;color:#7a3350}
+  .msg .ko{font-family:var(--font-kr);font-weight:400;font-size:12.5px;color:var(--sub);margin:0 6px}
+  .msg.speaking .bubble{box-shadow:0 0 0 2px var(--accent)}
+  .playall{position:sticky;bottom:12px;display:flex;justify-content:center;margin-top:16px}
+  .playall button{display:flex;align-items:center;gap:8px;background:#38222c;color:#ffe2e4;
+    font-weight:700;font-size:14.5px;border-radius:999px;padding:12px 22px;box-shadow:0 6px 18px rgba(30,15,22,.3)}
+  .playall button.playing{background:var(--red)}
+
+  /* roleplay step */
+  .rp-stage{display:flex;flex-direction:column;gap:12px;min-height:200px}
+  .rp-hint{font-size:13.5px;color:var(--sub);text-align:center;padding:4px 10px 10px}
+  .rp-you{background:#fffbfb;border:2px solid var(--accent);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+  .rp-you .lab{font-size:12px;font-weight:800;color:var(--accent-deep);letter-spacing:.06em;margin-bottom:6px}
+  .rp-ko{font-size:15.5px;font-weight:700;margin-bottom:14px;color:var(--head)}
+  .rp-en{font-family:var(--font-en);font-weight:800;font-size:19px;color:var(--accent-deep);
+    margin-bottom:8px;display:none}
+  .rp-you.revealed .rp-en{display:block}
+  .rp-acts{display:flex;gap:8px;flex-wrap:wrap}
+  .chipbtn{border:1.5px solid #e9c6d0;background:#fffbfb;border-radius:999px;
+    padding:9px 16px;font-size:14px;font-weight:700;color:var(--head)}
+  .chipbtn.primary{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(232,74,111,.35)}
+  .chipbtn.rec{border-color:var(--red);color:var(--red)}
+  .chipbtn.rec.live{background:var(--red);color:#fff;animation:pulse 1.2s infinite}
+  @keyframes pulse{50%{opacity:.65}}
+  @media (prefers-reduced-motion:reduce){ .chipbtn.rec.live{animation:none} }
+  .rp-fb{font-size:14px;font-weight:700;margin-top:10px;display:none}
+  .rp-fb.good{display:block;color:var(--green)}
+  .rp-fb.retry{display:block;color:var(--red)}
+  .rp-heard{font-size:12.5px;color:var(--sub);font-weight:400}
+
+  /* quiz step */
+  .qz-q{font-size:17px;font-weight:800;margin:6px 0 16px;text-wrap:balance;color:var(--head)}
+  .qz-opts{display:flex;flex-direction:column;gap:10px}
+  .qz-opt{background:#fffbfb;border:1.5px solid #e9c6d0;border-radius:16px;
+    padding:14px 16px;text-align:left;font-family:var(--font-en);font-weight:600;font-size:15.5px}
+  .qz-opt.ok{border-color:var(--green);background:#e9f3e6;color:var(--green)}
+  .qz-opt.no{border-color:var(--red);color:var(--red)}
+  .qz-prog{font-size:13px;font-weight:700;color:var(--sub);margin-bottom:4px;font-variant-numeric:tabular-nums}
+
+  /* done step */
+  .done-wrap{text-align:center;padding:24px 10px 10px}
+  .done-emma{width:150px;height:150px;object-fit:contain;display:block;margin:0 auto 10px;
+    filter:drop-shadow(0 12px 24px rgba(70,30,45,.25))}
+  .done-t{font-size:21px;font-weight:800;margin-bottom:6px;color:var(--head)}
+  .done-d{font-size:14.5px;color:var(--sub);margin-bottom:22px}
+  .done-exps{text-align:left;background:var(--card);border-radius:18px;
+    padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
+  .done-exps .en{font-family:var(--font-en);font-weight:700;font-size:15.5px;color:var(--head)}
+  .done-exps .ko{font-size:13px;color:var(--sub);margin-bottom:10px}
+
+  /* footer buttons in session */
+  .sfoot{padding:6px 20px 12px;display:flex;gap:10px}
+  .btn-main{flex:1;background:var(--grad);color:#fff;font-weight:800;font-size:16.5px;
+    border-radius:16px;padding:15px;transition:transform .1s;box-shadow:0 8px 24px rgba(232,74,111,.4)}
+  .btn-main:active{transform:scale(.98)}
+  .btn-main:disabled{background:#f3d7dd;color:var(--muted);box-shadow:none}
+  .btn-ghost{flex:none;background:#fffbfb;border:1.5px solid #e9c6d0;color:var(--head);
+    font-weight:700;border-radius:16px;padding:15px 18px}
+
+  /* ---------- review ---------- */
+  .rev-empty{text-align:center;color:var(--sub);padding:60px 20px;font-size:14.5px}
+  .rev-group{margin-bottom:20px}
+  .rev-group h3{font-size:14px;margin:0 4px 8px;color:var(--sub);font-weight:800}
+  .rev-item{display:flex;align-items:center;gap:12px;background:var(--card);
+    border-radius:16px;padding:13px 15px;margin-bottom:8px;width:100%;text-align:left;box-shadow:var(--shadow)}
+  .rev-item .en{font-family:var(--font-en);font-weight:700;font-size:15.5px;color:var(--head)}
+  .rev-item .ko{font-size:12.5px;color:var(--sub)}
+  .rev-play{margin-left:auto;flex:none;width:36px;height:36px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent-deep);display:flex;align-items:center;justify-content:center}
+
+  /* ---------- settings ---------- */
+  .set-card{background:var(--card);border-radius:18px;padding:4px 18px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .set-row:last-child{border-bottom:0}
+  .set-t{font-weight:700;font-size:15px;color:var(--head)}
+  .set-d{font-size:12.5px;color:var(--sub)}
+  .toggle{width:50px;height:30px;border-radius:999px;background:#ecccd6;position:relative;flex:none;transition:background .15s}
+  .toggle.on{background:var(--accent)}
+  .toggle i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;
+    transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .toggle.on i{left:23px}
+  .seg{display:flex;gap:6px;flex:none}
+  .seg button{border:1.5px solid #e9c6d0;border-radius:10px;padding:7px 12px;font-size:13.5px;font-weight:700;color:var(--sub)}
+  .seg button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep)}
+  select{font-family:inherit;font-size:14px;padding:8px 10px;border-radius:10px;border:1.5px solid #e9c6d0;
+    background:#fffbfb;color:var(--ink);max-width:180px}
+  .btn-danger{width:100%;text-align:center;color:var(--red);font-weight:700;font-size:14.5px;padding:14px}
+  .set-note{font-size:12.5px;color:var(--muted);margin:4px 6px 0}
+
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom));
+    background:#38222c;color:#ffe2e4;font-size:13.5px;font-weight:700;border-radius:999px;
+    padding:10px 18px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s;z-index:60;white-space:nowrap}
+  .toast.show{opacity:1;visibility:visible}
+</style>
+
+<div id="frame">
+
+  <!-- ============ HOME ============ -->
+  <section class="screen on" id="scr-home">
+    <div class="topbar">
+      <div class="brand">톡톡<em>영어</em></div>
+      <div class="streak">연속 <b id="streakN">0</b>일</div>
+    </div>
+
+    <div class="callcard">
+      <div class="call-row">
+        <div class="cc-txt">
+          <span class="cc-knock">똑똑 —</span>
+          <div class="call-name">Sunny</div>
+          <div class="call-status" id="callStatus">지금 통화할 수 있어요</div>
+          <div class="call-topic">오늘의 세션<br><b id="todayTitle"></b></div>
+        </div>
+        <img class="cc-emma" src="data:image/webp;base64,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" alt="노크하는 Sunny">
+      </div>
+      <button class="btn-call" id="btnCall">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
+        5분 통화 시작하기
+      </button>
+    </div>
+
+    <p class="sec-label">전체 세션</p>
+    <div class="slist" id="sessionList"></div>
+  </section>
+
+  <!-- ============ SESSION PLAYER ============ -->
+  <section class="screen" id="scr-sess">
+    <div id="sess">
+      <div class="shead">
+        <button class="btn-x" id="btnClose" aria-label="세션 닫기">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="shead-t" id="sessTitle"></div>
+        <div class="timer" id="timerBox">
+          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+            <circle cx="13" cy="13" r="11" fill="none" stroke="#f3d7dd" stroke-width="3"/>
+            <circle id="timerArc" cx="13" cy="13" r="11" fill="none" stroke="#e84a6f" stroke-width="3"
+              stroke-linecap="round" stroke-dasharray="69.1" stroke-dashoffset="0"/>
+          </svg>
+          <span class="timer-txt" id="timerTxt">5:00</span>
+        </div>
+      </div>
+      <div class="steps" id="stepDots"><i></i><i></i><i></i><i></i></div>
+      <div class="step-label" id="stepLabel"></div>
+      <div class="sbody" id="sbody"></div>
+      <div class="sfoot" id="sfoot"></div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEW ============ -->
+  <section class="screen" id="scr-rev">
+    <div class="topbar"><div class="brand">복습 노트</div></div>
+    <div id="revBody"></div>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section class="screen" id="scr-set">
+    <div class="topbar"><div class="brand">설정</div></div>
+
+    <div class="set-card">
+      <div class="set-row">
+        <div><div class="set-t">한국어 자막</div><div class="set-d">대화 아래에 해석을 함께 표시</div></div>
+        <button class="toggle on" id="tglKo" role="switch" aria-checked="true" aria-label="한국어 자막"><i></i></button>
+      </div>
+      <div class="set-row">
+        <div><div class="set-t">Sunny 말하기 속도</div></div>
+        <div class="seg" id="segRate">
+          <button data-r="0.8">천천히</button>
+          <button data-r="1" class="on">보통</button>
+          <button data-r="1.15">빠르게</button>
+        </div>
+      </div>
+      <div class="set-row">
+        <div><div class="set-t">Sunny 목소리</div><div class="set-d">기기에 설치된 영어 음성</div></div>
+        <select id="voiceSel" aria-label="음성 선택"></select>
+      </div>
+    </div>
+
+    <div class="set-card">
+      <div class="set-row">
+        <button class="btn-danger" id="btnReset">학습 기록 초기화</button>
+      </div>
+    </div>
+    <p class="set-note">음성은 휴대폰에 내장된 음성 엔진을 사용해요. 소리가 안 나면 무음 모드를 해제해 보세요.</p>
+  </section>
+
+  <!-- bottom nav -->
+  <nav id="nav">
+    <button data-scr="home" class="on">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>
+      홈
+    </button>
+    <button data-scr="rev">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+      복습
+    </button>
+    <button data-scr="set">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      설정
+    </button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+'use strict';
+/* ================= CHARACTER ================= */
+const SUNNY_IDLE = "data:image/webp;base64,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";
+
+/* ================= DATA ================= */
+const SESSIONS = [
+{ id:'cafe', tag:'일상', title:'카페에서 주문하기', desc:'주문부터 픽업까지 한 번에',
+  exps:[
+    {en:"Could I get a latte, please?", ko:"라떼 한 잔 주시겠어요?", note:"Can I get…보다 한 톤 부드러운 주문 표현이에요. 카페·식당 어디서든 통해요.",
+     ex:{en:"Could I get that iced?", ko:"그거 아이스로 주시겠어요?"}},
+    {en:"For here or to go?", ko:"드시고 가세요, 포장이세요?", note:"점원이 정말 자주 묻는 말. 대답은 \"To go, please.\" 또는 \"For here, please.\"",
+     ex:{en:"To go, please. I'm in a bit of a hurry.", ko:"포장이요. 제가 조금 급해서요."}}],
+  dlg:[
+    {w:'e', en:"Hi there! What can I get for you today?", ko:"어서 오세요! 오늘 뭘 드릴까요?"},
+    {w:'y', en:"Hi! Could I get a latte, please?", ko:"안녕하세요! 라떼 한 잔 주시겠어요?"},
+    {w:'e', en:"Sure. What size would you like?", ko:"네. 사이즈는 어떤 걸로 드릴까요?"},
+    {w:'y', en:"A medium, please.", ko:"미디엄으로 주세요."},
+    {w:'e', en:"For here or to go?", ko:"드시고 가세요, 포장이세요?"},
+    {w:'y', en:"To go, please.", ko:"포장이요."},
+    {w:'e', en:"That'll be four fifty. Your name, please?", ko:"4달러 50센트입니다. 성함이 어떻게 되세요?"},
+    {w:'y', en:"It's Jin. Thank you!", ko:"진이에요. 감사합니다!"}],
+  quiz:[
+    {q:"\"포장이요\"라고 답하려면?", c:["To go, please.","For here, please.","Take out it, please."], a:0},
+    {q:"부드럽게 주문을 시작하는 말은?", c:["Give me a latte.","Could I get a latte, please?","I need latte now."], a:1},
+    {q:"점원이 \"For here or to go?\"라고 물었다면?", c:["여기 자리 있냐는 뜻","먹고 갈지 포장할지 묻는 뜻","계산 방법을 묻는 뜻"], a:1}]},
+
+{ id:'weekend', tag:'스몰토크', title:'주말 스몰토크', desc:'\"주말 어땠어요?\"에 자연스럽게',
+  exps:[
+    {en:"How was your weekend?", ko:"주말 어땠어요?", note:"월요일 아침 단골 인사. 되물을 땐 \"How about you?\" 한 마디면 충분해요.",
+     ex:{en:"How was your weekend? Did you do anything fun?", ko:"주말 어땠어요? 재밌는 거 했어요?"}},
+    {en:"Nothing much, just took it easy.", ko:"별거 없었어요, 그냥 푹 쉬었어요.", note:"take it easy = 무리하지 않고 쉬다. 특별한 일 없을 때 만능 대답이에요.",
+     ex:{en:"I just took it easy at home.", ko:"그냥 집에서 푹 쉬었어요."}}],
+  dlg:[
+    {w:'e', en:"Morning! How was your weekend?", ko:"좋은 아침! 주말 어땠어요?"},
+    {w:'y', en:"Nothing much, just took it easy. How about you?", ko:"별거 없었어요, 그냥 쉬었어요. 그쪽은요?"},
+    {w:'e', en:"I went hiking with my sister. The weather was perfect.", ko:"언니랑 등산 갔어요. 날씨가 완벽했죠."},
+    {w:'y', en:"That sounds great! Where did you go?", ko:"좋았겠네요! 어디로 갔어요?"},
+    {w:'e', en:"A small mountain near the city. You should come next time!", ko:"도시 근처 작은 산이요. 다음엔 같이 가요!"},
+    {w:'y', en:"I'd love that. Let me know when you go again.", ko:"좋죠. 다음에 갈 때 알려줘요."}],
+  quiz:[
+    {q:"\"별거 없었어요, 그냥 쉬었어요\"는?", c:["Nothing much, just took it easy.","No thing, I rested hard.","Not special, I did easy."], a:0},
+    {q:"상대에게 되묻는 자연스러운 한 마디는?", c:["And you what?","How about you?","What is your weekend?"], a:1},
+    {q:"\"take it easy\"의 뜻은?", c:["쉽게 이기다","무리하지 않고 쉬다","대충 하다"], a:1}]},
+
+{ id:'direction', tag:'여행', title:'길 묻고 알아듣기', desc:'모르는 동네에서 당황하지 않기',
+  exps:[
+    {en:"I'm looking for the subway station.", ko:"지하철역을 찾고 있어요.", note:"\"Where is…?\"보다 자연스러운 시작. 뒤에 찾는 곳만 바꿔 끼우면 돼요.",
+     ex:{en:"Excuse me, I'm looking for a pharmacy.", ko:"실례합니다, 약국을 찾고 있어요."}},
+    {en:"You can't miss it.", ko:"금방 찾을 거예요. (못 지나칠 거예요)", note:"길을 알려준 뒤 흔히 덧붙이는 말. \"눈에 확 띄니까 걱정 마세요\"라는 뉘앙스예요.",
+     ex:{en:"It's the big red building. You can't miss it.", ko:"큰 빨간 건물이에요. 금방 보일 거예요."}}],
+  dlg:[
+    {w:'y', en:"Excuse me, I'm looking for the subway station.", ko:"실례합니다, 지하철역을 찾고 있는데요."},
+    {w:'e', en:"Oh, it's really close. Go straight two blocks and turn left.", ko:"아, 아주 가까워요. 두 블록 직진해서 왼쪽으로 도세요."},
+    {w:'y', en:"Straight two blocks, then left. Got it.", ko:"두 블록 직진 후 왼쪽이요. 알겠어요."},
+    {w:'e', en:"Right. It's next to a big bookstore. You can't miss it.", ko:"맞아요. 큰 서점 옆이에요. 금방 찾을 거예요."},
+    {w:'y', en:"Perfect. Thank you so much!", ko:"완벽해요. 정말 감사합니다!"},
+    {w:'e', en:"No problem. Have a good one!", ko:"별말씀을요. 좋은 하루 보내세요!"}],
+  quiz:[
+    {q:"길을 물을 때 자연스러운 시작은?", c:["Where is subway?","I'm looking for the subway station.","You know subway station?"], a:1},
+    {q:"\"You can't miss it.\"의 뜻은?", c:["놓치면 안 돼요","금방 찾을 거예요","가지 마세요"], a:1},
+    {q:"\"두 블록 직진 후 왼쪽\"을 확인하는 말은?", c:["Straight two blocks, then left. Got it.","Two block go, left turn, OK.","I walk two and left it."], a:0}]},
+
+{ id:'restaurant', tag:'일상', title:'식당 예약 전화', desc:'전화로 자리 잡는 법',
+  exps:[
+    {en:"I'd like to book a table for two.", ko:"두 명 자리를 예약하고 싶은데요.", note:"book = reserve. 인원은 for two, for four처럼 숫자만 바꾸면 돼요.",
+     ex:{en:"I'd like to book a table for four at seven.", ko:"7시에 네 명 자리를 예약하고 싶어요."}},
+    {en:"Under what name?", ko:"어느 분 성함으로 할까요?", note:"예약자 이름을 묻는 표현. 답은 \"Under Kim, please.\"처럼 Under + 이름.",
+     ex:{en:"The reservation is under Kim.", ko:"예약은 김으로 되어 있어요."}}],
+  dlg:[
+    {w:'e', en:"Thank you for calling Roma Kitchen. How can I help you?", ko:"로마 키친입니다. 무엇을 도와드릴까요?"},
+    {w:'y', en:"Hi, I'd like to book a table for two tonight.", ko:"안녕하세요, 오늘 저녁 두 명 자리를 예약하고 싶은데요."},
+    {w:'e', en:"Sure. What time were you thinking?", ko:"네. 몇 시쯤 생각하세요?"},
+    {w:'y', en:"Around seven, if possible.", ko:"가능하면 7시쯤이요."},
+    {w:'e', en:"Seven works. Under what name?", ko:"7시 가능합니다. 어느 분 성함으로 할까요?"},
+    {w:'y', en:"Under Jin, please.", ko:"진으로 부탁드려요."},
+    {w:'e', en:"All set, Jin. See you at seven!", ko:"예약됐습니다, 진 님. 7시에 뵐게요!"},
+    {w:'y', en:"Great, thank you. See you then!", ko:"좋아요, 감사합니다. 그때 봬요!"}],
+  quiz:[
+    {q:"\"두 명 자리를 예약하고 싶어요\"는?", c:["I want two chairs tonight.","I'd like to book a table for two.","Give me table of two people."], a:1},
+    {q:"\"Under what name?\"에 대한 답은?", c:["My name is under.","Under Jin, please.","I am name Jin."], a:1},
+    {q:"\"가능하면 7시쯤이요\"는?", c:["Seven o'clock, must.","Around seven, if possible.","Maybe seven, can you?"], a:1}]},
+
+{ id:'airport', tag:'여행', title:'공항 체크인', desc:'수속 카운터에서 쓰는 말',
+  exps:[
+    {en:"Could I have a window seat?", ko:"창가 자리로 주실 수 있나요?", note:"aisle seat(복도), window seat(창가). 원하는 자리를 먼저 말해보세요.",
+     ex:{en:"An aisle seat, if possible.", ko:"가능하면 복도 자리로요."}},
+    {en:"Is this carry-on okay?", ko:"이거 기내 반입 가방으로 괜찮나요?", note:"carry-on = 기내 반입 수하물, checked bag = 부치는 짐. 여행 필수 단어예요.",
+     ex:{en:"I have one checked bag and one carry-on.", ko:"부치는 짐 하나, 기내용 하나 있어요."}}],
+  dlg:[
+    {w:'e', en:"Good morning. May I see your passport, please?", ko:"안녕하세요. 여권 보여주시겠어요?"},
+    {w:'y', en:"Sure, here you go.", ko:"네, 여기 있습니다."},
+    {w:'e', en:"Thank you. Are you checking any bags?", ko:"감사합니다. 부치실 짐 있으세요?"},
+    {w:'y', en:"Just this one. And is this carry-on okay?", ko:"이거 하나요. 그리고 이건 기내 반입 괜찮나요?"},
+    {w:'e', en:"That's fine. Any seat preference?", ko:"괜찮습니다. 선호하는 자리 있으세요?"},
+    {w:'y', en:"Could I have a window seat?", ko:"창가 자리로 주실 수 있나요?"},
+    {w:'e', en:"You got it. Boarding starts at gate 12 at ten thirty.", ko:"네, 됐습니다. 탑승은 10시 30분, 12번 게이트예요."},
+    {w:'y', en:"Gate 12 at ten thirty. Thank you!", ko:"10시 반, 12번 게이트요. 감사합니다!"}],
+  quiz:[
+    {q:"창가 자리를 부탁하는 말은?", c:["Could I have a window seat?","Give me window.","I sit window side."], a:0},
+    {q:"\"carry-on\"은 무엇일까요?", c:["부치는 짐","기내 반입 가방","면세품 봉투"], a:1},
+    {q:"\"여기 있습니다\"라고 건넬 때는?", c:["Here you go.","This is it here.","You take this."], a:0}]},
+
+{ id:'hotel', tag:'여행', title:'호텔 체크인', desc:'조식·와이파이까지 챙기기',
+  exps:[
+    {en:"I have a reservation under Jin.", ko:"진으로 예약했는데요.", note:"체크인 첫마디는 이거 하나면 끝. under + 예약자 이름이 핵심이에요.",
+     ex:{en:"I have a reservation for two nights.", ko:"2박 예약했어요."}},
+    {en:"Is breakfast included?", ko:"조식이 포함인가요?", note:"included = 포함된. \"Is Wi-Fi included?\"처럼 응용 범위가 넓어요.",
+     ex:{en:"Is the airport shuttle included?", ko:"공항 셔틀은 포함인가요?"}}],
+  dlg:[
+    {w:'e', en:"Welcome to the Riverside Hotel. How may I help you?", ko:"리버사이드 호텔입니다. 무엇을 도와드릴까요?"},
+    {w:'y', en:"Hi, I have a reservation under Jin.", ko:"안녕하세요, 진으로 예약했는데요."},
+    {w:'e', en:"Let me check… yes, two nights, one queen bed. Correct?", ko:"확인해 볼게요… 네, 2박에 퀸 침대 하나. 맞으시죠?"},
+    {w:'y', en:"That's right. Is breakfast included?", ko:"맞아요. 조식이 포함인가요?"},
+    {w:'e', en:"Yes, it's served from seven to ten on the second floor.", ko:"네, 2층에서 7시부터 10시까지 제공됩니다."},
+    {w:'y', en:"Perfect. And what's the Wi-Fi password?", ko:"좋네요. 와이파이 비밀번호는 뭔가요?"},
+    {w:'e', en:"It's on your key card holder. Room 804, enjoy your stay!", ko:"키 카드 홀더에 적혀 있어요. 804호입니다, 편히 쉬세요!"},
+    {w:'y', en:"Thank you so much!", ko:"정말 감사합니다!"}],
+  quiz:[
+    {q:"\"진으로 예약했는데요\"는?", c:["I have a reservation under Jin.","Jin is reservation me.","My book name Jin."], a:0},
+    {q:"\"조식이 포함인가요?\"는?", c:["Breakfast is free time?","Is breakfast included?","Do you breakfast?"], a:1},
+    {q:"\"included\"의 뜻은?", c:["포함된","유료의","선택의"], a:0}]},
+
+{ id:'shopping', tag:'일상', title:'옷 가게에서', desc:'사이즈 묻고 입어보기',
+  exps:[
+    {en:"Do you have this in a medium?", ko:"이거 미디엄 있나요?", note:"in + 사이즈/색. \"in a large\", \"in black\"처럼 자유롭게 바꿔 쓰세요.",
+     ex:{en:"Do you have this in black?", ko:"이거 검정색 있나요?"}},
+    {en:"Where's the fitting room?", ko:"탈의실이 어디예요?", note:"fitting room = 탈의실. \"Can I try this on?\"(입어봐도 돼요?)과 세트로 기억!",
+     ex:{en:"Can I try this on?", ko:"이거 입어봐도 돼요?"}}],
+  dlg:[
+    {w:'e', en:"Hi! Let me know if you need any help.", ko:"안녕하세요! 도움 필요하시면 말씀 주세요."},
+    {w:'y', en:"Actually, do you have this in a medium?", ko:"마침 잘됐네요, 이거 미디엄 있나요?"},
+    {w:'e', en:"Let me check… yes, here's a medium.", ko:"확인해 볼게요… 네, 미디엄 여기 있어요."},
+    {w:'y', en:"Thanks! Can I try this on? Where's the fitting room?", ko:"감사해요! 입어봐도 되죠? 탈의실이 어디예요?"},
+    {w:'e', en:"Right over there, next to the mirror.", ko:"바로 저쪽이요, 거울 옆에요."},
+    {w:'y', en:"Great, I'll be quick.", ko:"좋아요, 금방 입어볼게요."},
+    {w:'e', en:"Take your time! That color really suits you, by the way.", ko:"천천히 보세요! 그런데 그 색 정말 잘 어울리세요."},
+    {w:'y', en:"Oh, thank you! I'll take it then.", ko:"오, 감사해요! 그럼 이걸로 살게요."}],
+  quiz:[
+    {q:"\"이거 미디엄 있나요?\"는?", c:["Do you have this in a medium?","This is medium have?","Medium this one exist?"], a:0},
+    {q:"\"입어봐도 돼요?\"는?", c:["Can I wear test?","Can I try this on?","May I dress this?"], a:1},
+    {q:"\"I'll take it.\"의 뜻은?", c:["가져가서 생각해볼게요","이걸로 살게요","반품할게요"], a:1}]},
+
+{ id:'phone', tag:'비즈니스', title:'전화 응대하기', desc:'회사 전화, 이 두 마디면 통과',
+  exps:[
+    {en:"May I ask who's calling?", ko:"실례지만 누구시라고 전해드릴까요?", note:"전화 건 사람을 정중히 확인하는 표준 표현. 회사 전화의 기본기예요.",
+     ex:{en:"May I ask what this is regarding?", ko:"어떤 용건인지 여쭤봐도 될까요?"}},
+    {en:"I'll put you through.", ko:"연결해 드리겠습니다.", note:"put through = 전화를 연결하다. \"Hold on, please.\"(잠시만요)와 세트로!",
+     ex:{en:"Hold on, please. I'll put you through to Ms. Park.", ko:"잠시만요. 박 팀장님께 연결해 드릴게요."}}],
+  dlg:[
+    {w:'e', en:"Hello, this is Sunny from Brightline. Is Mr. Lee available?", ko:"안녕하세요, 브라이트라인의 써니입니다. 이 과장님 계신가요?"},
+    {w:'y', en:"May I ask who's calling, please?", ko:"실례지만 누구시라고 전해드릴까요?"},
+    {w:'e', en:"It's Sunny Carter. I'm calling about tomorrow's meeting.", ko:"써니 카터입니다. 내일 회의 건으로 전화드렸어요."},
+    {w:'y', en:"One moment, please. I'll put you through.", ko:"잠시만 기다려 주세요. 연결해 드리겠습니다."},
+    {w:'e', en:"Thank you so much.", ko:"정말 감사합니다."},
+    {w:'y', en:"You're welcome. Putting you through now.", ko:"별말씀을요. 지금 연결해 드릴게요."}],
+  quiz:[
+    {q:"전화 건 사람을 정중히 확인하려면?", c:["Who are you?","May I ask who's calling?","Tell me your name."], a:1},
+    {q:"\"연결해 드리겠습니다\"는?", c:["I'll put you through.","I'll send you phone.","I'll pass your call away."], a:0},
+    {q:"\"잠시만 기다려 주세요\"는?", c:["Wait you.","One moment, please.","Stop a time, please."], a:1}]},
+
+{ id:'pharmacy', tag:'일상', title:'약국에서', desc:'증상 말하고 약 받기',
+  exps:[
+    {en:"I have a sore throat.", ko:"목이 아파요.", note:"I have a + 증상. headache(두통), runny nose(콧물), fever(열)로 바꿔 쓰세요.",
+     ex:{en:"I have a headache and a slight fever.", ko:"두통이 있고 열이 조금 나요."}},
+    {en:"Take one twice a day after meals.", ko:"하루 두 번, 식후에 한 알씩 드세요.", note:"twice a day = 하루 두 번. once(한 번), three times(세 번)로 응용!",
+     ex:{en:"Take this three times a day.", ko:"이걸 하루 세 번 드세요."}}],
+  dlg:[
+    {w:'e', en:"Hi, how can I help you today?", ko:"안녕하세요, 어떻게 도와드릴까요?"},
+    {w:'y', en:"I have a sore throat. It started yesterday.", ko:"목이 아파요. 어제부터 시작됐어요."},
+    {w:'e', en:"Any fever or cough?", ko:"열이나 기침도 있나요?"},
+    {w:'y', en:"A slight cough, but no fever.", ko:"기침이 조금 있는데 열은 없어요."},
+    {w:'e', en:"Then these lozenges should help. Take one twice a day after meals.", ko:"그럼 이 목캔디형 약이 도움이 될 거예요. 하루 두 번 식후에 하나씩 드세요."},
+    {w:'y', en:"Twice a day after meals. Got it.", ko:"하루 두 번 식후요. 알겠습니다."},
+    {w:'e', en:"If it doesn't get better in three days, please see a doctor.", ko:"3일 안에 낫지 않으면 병원에 가보세요."},
+    {w:'y', en:"I will. Thank you!", ko:"그럴게요. 감사합니다!"}],
+  quiz:[
+    {q:"\"목이 아파요\"는?", c:["My neck is pain.","I have a sore throat.","Throat is hurt me."], a:1},
+    {q:"\"twice a day\"의 뜻은?", c:["이틀에 한 번","하루 두 번","두 시간마다"], a:1},
+    {q:"\"열은 없어요\"는?", c:["No fever.","Not hot body.","Fever is zero."], a:0}]},
+
+{ id:'appointment', tag:'스몰토크', title:'약속 잡기', desc:'날짜 정하고, 미루고, 확정하기',
+  exps:[
+    {en:"Does Friday work for you?", ko:"금요일 괜찮으세요?", note:"work = (일정이) 되다. \"Does 3 o'clock work?\"처럼 시간에도 그대로 써요.",
+     ex:{en:"Does next Tuesday work for you?", ko:"다음 주 화요일 괜찮으세요?"}},
+    {en:"Can I take a rain check?", ko:"다음으로 미뤄도 될까요?", note:"rain check = 다음 기회. 거절이 아니라 \"꼭 다음에 하자\"는 예의 있는 표현이에요.",
+     ex:{en:"I'm swamped today. Can I take a rain check?", ko:"오늘 너무 바빠서요. 다음으로 미뤄도 될까요?"}}],
+  dlg:[
+    {w:'e', en:"Hey! Want to grab lunch this week?", ko:"저기! 이번 주에 점심 같이 먹을래요?"},
+    {w:'y', en:"I'd love to! Does Friday work for you?", ko:"좋죠! 금요일 괜찮으세요?"},
+    {w:'e', en:"Hmm, Friday is a bit tight. How about Thursday?", ko:"음, 금요일은 좀 빠듯해요. 목요일은 어때요?"},
+    {w:'y', en:"Thursday works. Noon at the pasta place?", ko:"목요일 좋아요. 12시에 그 파스타집?"},
+    {w:'e', en:"Perfect. Oh wait—I might have a call at noon.", ko:"완벽해요. 아 잠깐, 12시에 통화가 있을 수도 있어요."},
+    {w:'y', en:"No worries. If it runs long, we can take a rain check.", ko:"걱정 마요. 길어지면 다음으로 미루면 되죠."},
+    {w:'e', en:"You're the best. Let's aim for Thursday noon!", ko:"최고예요. 목요일 12시로 해봐요!"},
+    {w:'y', en:"Deal. See you then!", ko:"좋아요. 그때 봐요!"}],
+  quiz:[
+    {q:"\"금요일 괜찮으세요?\"는?", c:["Is Friday good day?","Does Friday work for you?","Friday can you?"], a:1},
+    {q:"\"rain check\"의 뉘앙스는?", c:["완전히 거절하기","다음 기회로 미루기","비 오면 취소하기"], a:1},
+    {q:"\"목요일 좋아요\"라고 받는 말은?", c:["Thursday works.","Thursday is work.","I work Thursday."], a:0}]},
+
+{ id:'thanks', tag:'스몰토크', title:'감사와 사과', desc:'Thank you 너머의 진짜 표현',
+  exps:[
+    {en:"I really appreciate it.", ko:"정말 감사드려요.", note:"Thank you보다 마음이 담긴 감사. 도움을 받았을 때 한 단계 진하게 전해요.",
+     ex:{en:"Thanks for covering for me. I really appreciate it.", ko:"대신해 줘서 고마워요. 정말 감사해요."}},
+    {en:"My bad — it won't happen again.", ko:"제 실수예요 — 다신 안 그럴게요.", note:"My bad = 가볍고 쿨한 사과(캐주얼). 격식 자리에선 \"I apologize.\"를 쓰세요.",
+     ex:{en:"Oh, my bad. I sent you the wrong file.", ko:"앗, 제 실수예요. 파일을 잘못 보냈네요."}}],
+  dlg:[
+    {w:'e', en:"Here are the notes from the meeting you missed.", ko:"놓친 회의 내용 정리한 노트예요."},
+    {w:'y', en:"You made notes for me? I really appreciate it.", ko:"저를 위해 정리해 줬어요? 정말 감사해요."},
+    {w:'e', en:"Of course! Oh, and you missed the schedule change.", ko:"당연하죠! 아, 그리고 일정 변경된 거 놓쳤죠."},
+    {w:'y', en:"My bad — I didn't check the group chat.", ko:"제 실수예요 — 단체 채팅을 확인 안 했네요."},
+    {w:'e', en:"No worries. It happens to everyone.", ko:"괜찮아요. 누구나 그럴 수 있죠."},
+    {w:'y', en:"Still, it won't happen again. Lunch is on me today!", ko:"그래도 다신 안 그럴게요. 오늘 점심은 제가 살게요!"},
+    {w:'e', en:"Ha! Deal. You're too kind.", ko:"하하! 좋아요. 너무 착하시네요."}],
+  quiz:[
+    {q:"진하게 감사를 전하는 말은?", c:["Thank you so-so.","I really appreciate it.","You are appreciate."], a:1},
+    {q:"\"My bad\"를 쓰기 좋은 상황은?", c:["회사 공식 사과문","친구에게 가벼운 실수 사과","면접에서 지각 사과"], a:1},
+    {q:"\"오늘 점심은 제가 살게요\"는?", c:["Lunch is on me today!","I pay lunch you.","Today lunch, my money."], a:0}]},
+
+{ id:'weather', tag:'스몰토크', title:'날씨로 말 걸기', desc:'어색한 침묵을 깨는 기술',
+  exps:[
+    {en:"It's such a nice day, isn't it?", ko:"날씨 정말 좋네요, 그렇죠?", note:"부가의문문 isn't it?으로 부드럽게 동의를 구하며 대화를 여는 표현이에요.",
+     ex:{en:"It's freezing today, isn't it?", ko:"오늘 진짜 춥네요, 그렇죠?"}},
+    {en:"I heard it's going to rain this weekend.", ko:"주말에 비 온다고 들었어요.", note:"I heard… = ~라고 들었어요. 뉴스·소문·날씨 어디에나 붙는 만능 시작이에요.",
+     ex:{en:"I heard there's a heat wave coming.", ko:"폭염이 온다고 들었어요."}}],
+  dlg:[
+    {w:'y', en:"It's such a nice day, isn't it?", ko:"날씨 정말 좋네요, 그렇죠?"},
+    {w:'e', en:"It really is! Perfect for a walk.", ko:"정말 그래요! 산책하기 딱이에요."},
+    {w:'y', en:"Totally. But I heard it's going to rain this weekend.", ko:"완전요. 근데 주말엔 비 온다고 들었어요."},
+    {w:'e', en:"Oh no, I was planning a picnic on Saturday.", ko:"이런, 토요일에 소풍 가려고 했는데."},
+    {w:'y', en:"Maybe move it to Sunday? It should clear up by then.", ko:"일요일로 옮기는 건 어때요? 그때쯤엔 갤 거예요."},
+    {w:'e', en:"Good idea. Fingers crossed!", ko:"좋은 생각이에요. 행운을 빌어야죠!"}],
+  quiz:[
+    {q:"날씨로 자연스럽게 말을 거는 표현은?", c:["Weather is good, yes?","It's such a nice day, isn't it?","Nice day you think?"], a:1},
+    {q:"\"~라고 들었어요\"는?", c:["I heard…","I listened…","Someone say me…"], a:0},
+    {q:"\"Fingers crossed\"의 뜻은?", c:["손가락 다쳤어요","행운을 빌어요","약속해요"], a:1}]}
+];
+
+/* ================= STATE ================= */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('fme_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('fme_'+k, JSON.stringify(v)); }catch(e){} }
+};
+let doneIds   = store.get('done', []);
+let learned   = store.get('learned', []);   // [{sid, en, ko}]
+let streak    = store.get('streak', 0);
+let lastDay   = store.get('lastDay', '');
+let rate      = store.get('rate', 1);
+let showKo    = store.get('showKo', true);
+let voiceName = store.get('voice', '');
+
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ================= SPEECH ================= */
+const synth = window.speechSynthesis || null;
+let voices = [];
+function loadVoices(){
+  if(!synth) return;
+  voices = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+  const sel = $('#voiceSel');
+  sel.innerHTML = '';
+  if(!voices.length){
+    const o = document.createElement('option'); o.textContent = '자동'; sel.appendChild(o); return;
+  }
+  voices.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v.name; o.textContent = v.name.replace(/\(.*\)/,'').trim();
+    if(v.name === voiceName) o.selected = true;
+    sel.appendChild(o);
+  });
+  if(!voiceName){
+    const pref = voices.find(v=>/samantha|zira|aria|jenny|female|google us english/i.test(v.name)) || voices[0];
+    if(pref){ voiceName = pref.name; $('#voiceSel').value = pref.name; }
+  }
+}
+if(synth){ loadVoices(); synth.onvoiceschanged = loadVoices; }
+
+let onSpeakEnd = null, speakGuard = null;
+function speak(text, cb){
+  if(!synth){ if(cb) cb(); return; }
+  synth.cancel();
+  if(speakGuard){ clearTimeout(speakGuard); speakGuard = null; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = rate;
+  const v = voices.find(x=>x.name===voiceName); if(v) u.voice = v;
+  onSpeakEnd = cb || null;
+  const finish = ()=>{
+    if(speakGuard){ clearTimeout(speakGuard); speakGuard = null; }
+    const f = onSpeakEnd; onSpeakEnd = null; if(f) f();
+  };
+  u.onend = u.onerror = finish;
+  // 일부 기기에서 onend가 오지 않는 경우 대비: 넉넉한 예상 재생시간 후 강제 종료
+  speakGuard = setTimeout(finish, Math.max(2500, text.length*120/rate + 3000));
+  synth.speak(u);
+}
+function stopSpeak(){
+  onSpeakEnd = null;
+  if(speakGuard){ clearTimeout(speakGuard); speakGuard = null; }
+  if(synth) synth.cancel();
+}
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
+/* ================= NAV ================= */
+function show(scr){
+  $$('.screen').forEach(s=>s.classList.remove('on'));
+  $('#scr-'+scr).classList.add('on');
+  $$('#nav button').forEach(b=>b.classList.toggle('on', b.dataset.scr===scr));
+  $('#nav').classList.toggle('hidden', scr==='sess');
+  window.scrollTo(0,0);
+  if(scr==='home') renderHome();
+  if(scr==='rev')  renderReview();
+}
+$$('#nav button').forEach(b=> b.addEventListener('click', ()=>{ stopSpeak(); show(b.dataset.scr); }));
+
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ================= HOME ================= */
+function todaySession(){ return SESSIONS.find(s=>!doneIds.includes(s.id)) || SESSIONS[0]; }
+function renderHome(){
+  $('#streakN').textContent = streak;
+  const t = todaySession();
+  $('#todayTitle').textContent = t.title;
+  const h = new Date().getHours();
+  $('#callStatus').textContent = h<12 ? '좋은 아침이에요! 통화할까요?' : h<18 ? '지금 통화할 수 있어요' : '자기 전 5분, 어때요?';
+  const list = $('#sessionList'); list.innerHTML = '';
+  SESSIONS.forEach((s,i)=>{
+    const done = doneIds.includes(s.id);
+    const b = document.createElement('button');
+    b.className = 'srow'+(done?' done':'');
+    b.innerHTML = `<span class="snum">${done?'✓':String(i+1).padStart(2,'0')}</span>
+      <span><span class="srow-t">${s.title}</span><br><span class="srow-d">${s.desc}</span></span>
+      <span class="srow-tag">${done?'완료':s.tag}</span>`;
+    b.addEventListener('click', ()=>openSession(s));
+    list.appendChild(b);
+  });
+}
+$('#btnCall').addEventListener('click', ()=>openSession(todaySession()));
+
+/* ================= SESSION PLAYER ================= */
+const STEP_LABELS = ['STEP 1 · 오늘의 표현','STEP 2 · 대화 듣기','STEP 3 · 롤플레이','STEP 4 · 확인 퀴즈'];
+let cur = null, step = 0, timerId = null, timeLeft = 300;
+
+function openSession(s){
+  cur = s; step = 0; timeLeft = 300;
+  $('#sessTitle').textContent = s.title;
+  show('sess');
+  startTimer();
+  renderStep();
+}
+function closeSession(){
+  stopSpeak(); stopTimer();
+  if(recog){ try{recog.abort();}catch(e){} recog = null; }
+  show('home');
+}
+$('#btnClose').addEventListener('click', closeSession);
+
+function startTimer(){
+  stopTimer();
+  const box = $('#timerBox'); box.classList.remove('over');
+  updTimer();
+  timerId = setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){ timeLeft=0; stopTimer(); box.classList.add('over'); toast('5분이 지났어요! 마무리해 볼까요?'); }
+    updTimer();
+  },1000);
+}
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+function updTimer(){
+  const m = Math.floor(timeLeft/60), s = timeLeft%60;
+  $('#timerTxt').textContent = m+':'+String(s).padStart(2,'0');
+  const C = 69.1;
+  $('#timerArc').setAttribute('stroke-dashoffset', String(C*(1-timeLeft/300)));
+}
+
+function renderStep(){
+  stopSpeak();
+  $$('#stepDots i').forEach((d,i)=>d.classList.toggle('on', i<=step));
+  $('#stepLabel').textContent = STEP_LABELS[step] || '';
+  const body = $('#sbody'), foot = $('#sfoot');
+  body.innerHTML = ''; foot.innerHTML = '';
+  if(step===0) renderExps(body, foot);
+  else if(step===1) renderDialogue(body, foot);
+  else if(step===2) renderRoleplay(body, foot);
+  else if(step===3) renderQuiz(body, foot);
+  else renderDone(body, foot);
+  window.scrollTo(0,0);
+}
+function footNext(label, fn){
+  const b = document.createElement('button');
+  b.className='btn-main'; b.textContent = label;
+  b.addEventListener('click', ()=>{ stopSpeak(); fn(); });
+  $('#sfoot').appendChild(b);
+  return b;
+}
+
+/* ---- step 0: expressions ---- */
+function renderExps(body){
+  cur.exps.forEach(x=>{
+    const c = document.createElement('div');
+    c.className='expcard';
+    c.innerHTML = `<div class="exp-en">${x.en}</div>
+      <div class="exp-ko">${x.ko}</div>
+      <div class="exp-note">${x.note}</div>
+      <div class="exp-ex"><div class="en">${x.ex.en}</div><div class="ko">${x.ex.ko}</div></div>`;
+    const btn = document.createElement('button');
+    btn.className='btn-listen';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg> 듣기';
+    btn.addEventListener('click', ()=>{
+      $$('.btn-listen').forEach(b=>b.classList.remove('playing'));
+      btn.classList.add('playing');
+      speak(x.en, ()=>btn.classList.remove('playing'));
+    });
+    c.appendChild(btn);
+    body.appendChild(c);
+  });
+  footNext('대화 들으러 가기', ()=>{ step=1; renderStep(); });
+}
+
+/* ---- step 1: dialogue ---- */
+let playing = false;
+function renderDialogue(body){
+  const chat = document.createElement('div'); chat.className='chat';
+  const wrap = document.createElement('div'); wrap.className='playall';
+  const pb = document.createElement('button');
+  const pbReset = ()=>{ pb.classList.remove('playing'); pb.innerHTML = playIcon()+' 전체 듣기'; };
+  cur.dlg.forEach((t,i)=>{
+    const m = document.createElement('div');
+    m.className = 'msg '+t.w;
+    m.innerHTML = `<span class="who">${t.w==='e'?'SUNNY':'YOU'}</span>
+      <span class="bubble">${t.en}</span>
+      ${showKo? `<span class="ko">${t.ko}</span>` : ''}`;
+    m.querySelector('.bubble').addEventListener('click', ()=>{
+      playing=false; pbReset(); markSpeaking(i);
+      speak(t.en, ()=>markSpeaking(-1));
+    });
+    chat.appendChild(m);
+  });
+  body.appendChild(chat);
+
+  pb.innerHTML = playIcon()+' 전체 듣기';
+  pb.addEventListener('click', ()=>{
+    if(playing){ playing=false; stopSpeak(); markSpeaking(-1); pb.classList.remove('playing'); pb.innerHTML = playIcon()+' 전체 듣기'; return; }
+    playing = true; pb.classList.add('playing'); pb.innerHTML = stopIcon()+' 정지';
+    let i = 0;
+    const next = ()=>{
+      if(!playing || i>=cur.dlg.length){
+        playing=false; markSpeaking(-1); pb.classList.remove('playing'); pb.innerHTML = playIcon()+' 전체 듣기'; return;
+      }
+      markSpeaking(i);
+      speak(cur.dlg[i].en, ()=>{ i++; setTimeout(next, 350); });
+    };
+    next();
+  });
+  wrap.appendChild(pb); body.appendChild(wrap);
+
+  footNext('롤플레이 도전하기', ()=>{ playing=false; step=2; renderStep(); });
+}
+function markSpeaking(i){
+  $$('.chat .msg').forEach((m,j)=>{
+    m.classList.toggle('speaking', j===i);
+    if(j===i) m.scrollIntoView({block:'center', behavior:'smooth'});
+  });
+}
+function playIcon(){ return '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'; }
+function stopIcon(){ return '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'; }
+
+/* ---- step 2: roleplay ---- */
+let rpIdx = 0, recog = null;
+function renderRoleplay(body, foot){
+  rpIdx = 0;
+  const hint = document.createElement('p');
+  hint.className='rp-hint';
+  hint.textContent = 'Sunny의 말을 듣고, 당신 차례가 되면 한국어 뜻을 보고 영어로 말해 보세요.';
+  body.appendChild(hint);
+  const stage = document.createElement('div'); stage.className='rp-stage'; stage.id='rpStage';
+  body.appendChild(stage);
+  rpAdvance(stage);
+}
+function rpAdvance(stage){
+  if(rpIdx >= cur.dlg.length){
+    $('#sfoot').innerHTML='';
+    footNext('퀴즈 풀러 가기', ()=>{ step=3; renderStep(); });
+    toast('롤플레이 완료! 잘했어요');
+    return;
+  }
+  const t = cur.dlg[rpIdx];
+  if(t.w==='e'){
+    const m = document.createElement('div');
+    m.className='msg e';
+    m.style.maxWidth='100%';
+    m.innerHTML = `<span class="who">SUNNY</span><span class="bubble">${t.en}</span>
+      ${showKo? `<span class="ko">${t.ko}</span>` : ''}`;
+    m.querySelector('.bubble').addEventListener('click', ()=>speak(t.en));
+    stage.appendChild(m);
+    m.scrollIntoView({block:'center', behavior:'smooth'});
+    speak(t.en, ()=>{ rpIdx++; rpAdvance(stage); });
+  } else {
+    const card = document.createElement('div');
+    card.className='rp-you';
+    card.innerHTML = `<div class="lab">YOUR TURN — 영어로 말해 보세요</div>
+      <div class="rp-ko">${t.ko}</div>
+      <div class="rp-en">${t.en}</div>
+      <div class="rp-acts"></div>
+      <div class="rp-fb"></div>`;
+    const acts = card.querySelector('.rp-acts');
+    const fb = card.querySelector('.rp-fb');
+
+    if(SR){
+      const mic = document.createElement('button');
+      mic.className='chipbtn rec';
+      mic.textContent='말하기';
+      mic.addEventListener('click', ()=>{
+        if(recog){ try{recog.abort();}catch(e){} recog=null; mic.classList.remove('live'); mic.textContent='말하기'; return; }
+        stopSpeak();
+        recog = new SR();
+        recog.lang='en-US'; recog.interimResults=false; recog.maxAlternatives=1;
+        mic.classList.add('live'); mic.textContent='듣는 중…';
+        recog.onresult = e=>{
+          const said = e.results[0][0].transcript;
+          const score = matchScore(said, t.en);
+          card.classList.add('revealed');
+          if(score>=0.6){ fb.className='rp-fb good'; fb.innerHTML=`좋아요! 아주 잘했어요 <span class="rp-heard">들린 말: “${said}”</span>`; }
+          else { fb.className='rp-fb retry'; fb.innerHTML=`조금만 더! 정답을 보고 다시 말해 보세요 <span class="rp-heard">들린 말: “${said}”</span>`; }
+        };
+        recog.onend = ()=>{ recog=null; mic.classList.remove('live'); mic.textContent='말하기'; };
+        recog.onerror = ()=>{ recog=null; mic.classList.remove('live'); mic.textContent='말하기'; };
+        try{ recog.start(); }catch(e){ recog=null; mic.classList.remove('live'); mic.textContent='말하기'; }
+      });
+      acts.appendChild(mic);
+    }
+
+    const rev = document.createElement('button');
+    rev.className='chipbtn'; rev.textContent='정답 보기';
+    rev.addEventListener('click', ()=>{ card.classList.add('revealed'); speak(t.en); });
+    acts.appendChild(rev);
+
+    const nxt = document.createElement('button');
+    nxt.className='chipbtn primary'; nxt.textContent='다음';
+    nxt.addEventListener('click', ()=>{
+      if(recog){ try{recog.abort();}catch(e){} recog=null; }
+      card.classList.add('revealed');
+      card.querySelectorAll('button').forEach(b=>b.disabled=true);
+      card.style.opacity='.75'; card.style.borderColor='var(--line)';
+      rpIdx++; rpAdvance(stage);
+    });
+    acts.appendChild(nxt);
+
+    stage.appendChild(card);
+    card.scrollIntoView({block:'center', behavior:'smooth'});
+  }
+}
+function matchScore(said, target){
+  const norm = s => s.toLowerCase().replace(/[^a-z' ]/g,' ').split(/\s+/).filter(Boolean);
+  const a = norm(said), b = norm(target);
+  if(!b.length) return 0;
+  const setA = new Set(a);
+  let hit = 0; b.forEach(w=>{ if(setA.has(w)) hit++; });
+  return hit/b.length;
+}
+
+/* ---- step 3: quiz ---- */
+let qIdx = 0, qOk = 0;
+function renderQuiz(body){
+  qIdx = 0; qOk = 0;
+  drawQuiz(body);
+}
+function drawQuiz(body){
+  body.innerHTML = '';
+  const q = cur.quiz[qIdx];
+  const prog = document.createElement('div');
+  prog.className='qz-prog'; prog.textContent = `${qIdx+1} / ${cur.quiz.length}`;
+  body.appendChild(prog);
+  const qq = document.createElement('div'); qq.className='qz-q'; qq.textContent = q.q;
+  body.appendChild(qq);
+  const opts = document.createElement('div'); opts.className='qz-opts';
+  q.c.forEach((c,i)=>{
+    const o = document.createElement('button');
+    o.className='qz-opt'; o.textContent = c;
+    o.addEventListener('click', ()=>{
+      if(opts.dataset.lock) return;
+      opts.dataset.lock='1';
+      if(i===q.a){ o.classList.add('ok'); qOk++; }
+      else{ o.classList.add('no'); opts.children[q.a].classList.add('ok'); }
+      setTimeout(()=>{
+        qIdx++;
+        if(qIdx < cur.quiz.length) drawQuiz(body);
+        else { step=4; renderStep(); }
+      }, 900);
+    });
+    opts.appendChild(o);
+  });
+  body.appendChild(opts);
+  $('#sfoot').innerHTML='';
+}
+
+/* ---- step 4: done ---- */
+function renderDone(body){
+  stopTimer();
+  const first = !doneIds.includes(cur.id);
+  if(first){
+    doneIds.push(cur.id); store.set('done', doneIds);
+    cur.exps.forEach(x=>{
+      if(!learned.some(l=>l.en===x.en)) learned.push({sid:cur.id, en:x.en, ko:x.ko});
+    });
+    store.set('learned', learned);
+    const today = new Date().toDateString();
+    if(lastDay !== today){
+      const y = new Date(Date.now()-864e5).toDateString();
+      streak = (lastDay===y) ? streak+1 : 1;
+      lastDay = today;
+      store.set('streak', streak); store.set('lastDay', lastDay);
+    }
+  }
+  const wrap = document.createElement('div'); wrap.className='done-wrap';
+  wrap.innerHTML = `
+    <img class="done-emma" src="${SUNNY_IDLE}" alt="인사하는 Sunny">
+    <div class="done-t">오늘의 5분, 완료!</div>
+    <div class="done-d">퀴즈 ${qOk}/${cur.quiz.length} 정답 · 표현 ${cur.exps.length}개를 복습 노트에 저장했어요</div>
+    <div class="done-exps">
+      ${cur.exps.map(x=>`<div class="en">${x.en}</div><div class="ko">${x.ko}</div>`).join('')}
+    </div>`;
+  body.appendChild(wrap);
+  footNext('홈으로', closeSession);
+}
+
+/* ================= REVIEW ================= */
+function renderReview(){
+  const el = $('#revBody'); el.innerHTML='';
+  if(!learned.length){
+    el.innerHTML = '<div class="rev-empty">아직 저장된 표현이 없어요.<br>세션을 완료하면 배운 표현이 여기에 모여요.</div>';
+    return;
+  }
+  const bySess = {};
+  learned.forEach(l=>{ (bySess[l.sid] = bySess[l.sid]||[]).push(l); });
+  Object.keys(bySess).forEach(sid=>{
+    const s = SESSIONS.find(x=>x.id===sid);
+    const g = document.createElement('div'); g.className='rev-group';
+    g.innerHTML = `<h3>${s ? s.title : sid}</h3>`;
+    bySess[sid].forEach(l=>{
+      const it = document.createElement('button');
+      it.className='rev-item';
+      it.innerHTML = `<span><span class="en">${l.en}</span><br><span class="ko">${l.ko}</span></span>
+        <span class="rev-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>`;
+      it.addEventListener('click', ()=>speak(l.en));
+      g.appendChild(it);
+    });
+    el.appendChild(g);
+  });
+}
+
+/* ================= SETTINGS ================= */
+$('#tglKo').addEventListener('click', ()=>{
+  showKo = !showKo; store.set('showKo', showKo);
+  const t = $('#tglKo');
+  t.classList.toggle('on', showKo);
+  t.setAttribute('aria-checked', String(showKo));
+});
+$$('#segRate button').forEach(b=>{
+  if(Math.abs(parseFloat(b.dataset.r)-rate)<0.01){ $$('#segRate button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); }
+  b.addEventListener('click', ()=>{
+    rate = parseFloat(b.dataset.r); store.set('rate', rate);
+    $$('#segRate button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+    speak('Hello! This is my speaking speed.');
+  });
+});
+$('#voiceSel').addEventListener('change', e=>{
+  voiceName = e.target.value; store.set('voice', voiceName);
+  speak("Hi, I'm Sunny. Nice to meet you!");
+});
+let resetArmed = null;
+$('#btnReset').addEventListener('click', ()=>{
+  const b = $('#btnReset');
+  if(!resetArmed){
+    b.textContent = '한 번 더 누르면 모두 지워져요';
+    resetArmed = setTimeout(()=>{ resetArmed=null; b.textContent='학습 기록 초기화'; }, 3000);
+    return;
+  }
+  clearTimeout(resetArmed); resetArmed = null;
+  b.textContent = '학습 기록 초기화';
+  doneIds=[]; learned=[]; streak=0; lastDay='';
+  store.set('done',[]); store.set('learned',[]); store.set('streak',0); store.set('lastDay','');
+  toast('기록을 초기화했어요');
+  renderHome();
+});
+
+/* init toggle state from storage */
+(function(){
+  const t = $('#tglKo');
+  t.classList.toggle('on', showKo);
+  t.setAttribute('aria-checked', String(showKo));
+})();
+
+renderHome();
+</script>
+
+</body>
+</html>
