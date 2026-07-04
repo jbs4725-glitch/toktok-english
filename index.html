@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>톡톡영어 — Sunny와 5분 통화</title>
-<meta name="description" content="Sunny와 하루 5분 영어회화 — 표현·대화·롤플레이·퀴즈·간격반복 복습·발음 채점까지 핸드폰으로.">
+<meta name="description" content="Sunny와 하루 5분 영어회화 — 자동 통화 롤플레이·간격반복 복습·발음 채점까지 핸드폰으로.">
 <meta property="og:title" content="톡톡영어 — Sunny와 5분 통화">
-<meta property="og:description" content="Sunny와 하루 5분 영어회화 — 원하는 상황을 만들고, 복습 퀴즈로 기억하세요.">
+<meta property="og:description" content="Sunny가 말하면 내가 대답하는 5분 영어 통화 연습.">
 <meta name="theme-color" content="#fff9f1">
 </head>
 <body>
@@ -28,8 +28,15 @@
   #frame{max-width:430px;margin:0 auto;min-height:100dvh;position:relative}
   @media (min-width:500px){ #frame{border-left:1px solid var(--line);border-right:1px solid var(--line)} }
 
-  .screen{display:none;padding:20px 20px calc(84px + env(safe-area-inset-bottom));min-height:100dvh}
+  .screen{display:none;padding:20px 20px calc(84px + env(safe-area-inset-bottom));min-height:100vh;min-height:100dvh}
   .screen.on{display:block}
+
+  .inapp-banner{display:none;background:#fff2d6;border:1.5px solid #f2cf8e;border-radius:16px;
+    padding:12px 40px 12px 14px;font-size:13px;color:#7a5a1e;line-height:1.5;margin-bottom:14px;position:relative}
+  .inapp-banner.show{display:block}
+  .inapp-banner b{display:block}
+  .inapp-close{position:absolute;right:8px;top:8px;width:28px;height:28px;border-radius:50%;
+    color:#b3906e;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center}
 
   /* ---------- top bar ---------- */
   .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
@@ -299,6 +306,12 @@
 
   <!-- ============ HOME ============ -->
   <section class="screen on" id="scr-home">
+    <div class="inapp-banner" id="inappBanner">
+      <b>소리가 안 들리나요?</b>
+      카카오톡 등 앱 내부 브라우저에서는 음성이 재생되지 않을 수 있어요.
+      링크를 복사해 <b>Chrome이나 Safari에서 열어주세요.</b> 무음 모드(측면 스위치)도 확인!
+      <button class="inapp-close" id="inappClose" aria-label="닫기">✕</button>
+    </div>
     <div class="topbar">
       <div class="brand">톡톡<em>영어</em></div>
       <div class="streak">연속 <b id="streakN">0</b>일</div>
@@ -407,6 +420,10 @@
     </div>
 
     <div class="set-card">
+      <div class="set-row">
+        <div><div class="set-t">소리 테스트</div><div class="set-d">Sunny 목소리가 들리는지 확인</div></div>
+        <button class="chipbtn primary" id="btnSoundTest" style="flex:none">테스트 ▶</button>
+      </div>
       <div class="set-row">
         <button class="btn-danger" id="btnReset">학습 기록 초기화</button>
       </div>
@@ -979,28 +996,60 @@ function loadVoices(){
 }
 if(synth){ loadVoices(); synth.onvoiceschanged = loadVoices; }
 
-let onSpeakEnd = null, speakGuard = null;
+let onSpeakEnd = null, speakGuard = null, speakToken = 0, ttsErrors = 0, ttsUnlocked = false;
+
+/* iOS 오디오 잠금 해제: 첫 터치/클릭 순간에 무음 발화 1회 */
+function ttsUnlock(){
+  if(ttsUnlocked || !synth) return;
+  ttsUnlocked = true;
+  try{
+    const u = new SpeechSynthesisUtterance('.');
+    u.volume = 0; u.rate = 2;
+    synth.speak(u);
+  }catch(e){}
+}
+['touchend','click'].forEach(ev=>document.addEventListener(ev, ttsUnlock, {once:true, capture:true}));
+
 function speak(text, cb){
   if(!synth){ if(cb) cb(); return; }
-  synth.cancel();
+  const my = ++speakToken;                       // 이전 발화의 콜백/에러가 새 발화를 침범하지 못하게
+  const wasBusy = synth.speaking || synth.pending;
+  try{ synth.cancel(); }catch(e){}
   if(speakGuard){ clearTimeout(speakGuard); speakGuard = null; }
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-US'; u.rate = rate;
+  u.lang = 'en-US'; u.rate = rate; u.volume = 1;
   const v = voices.find(x=>x.name===voiceName); if(v) u.voice = v;
   onSpeakEnd = cb || null;
   const finish = ()=>{
+    if(my !== speakToken) return;                // 취소된 옛 발화는 무시
     if(speakGuard){ clearTimeout(speakGuard); speakGuard = null; }
     const f = onSpeakEnd; onSpeakEnd = null; if(f) f();
   };
-  u.onend = u.onerror = finish;
-  // 일부 기기에서 onend가 오지 않는 경우 대비: 넉넉한 예상 재생시간 후 강제 종료
+  u.onstart = ()=>{ ttsErrors = 0; };
+  u.onend = finish;
+  u.onerror = e=>{
+    const kind = e && e.error;
+    if(kind !== 'interrupted' && kind !== 'canceled'){
+      ttsErrors++;
+      if(ttsErrors === 2) toast('소리가 안 나면: 무음 모드 해제, 또는 Chrome·Safari로 열어주세요');
+    }
+    finish();
+  };
+  // 일부 기기에서 onend가 오지 않는 경우 대비: 넉넉한 예상 재생시간 후 강제 진행
   speakGuard = setTimeout(finish, Math.max(2500, text.length*120/rate + 3000));
-  synth.speak(u);
+  const go = ()=>{
+    if(my !== speakToken) return;
+    try{ synth.resume(); }catch(e){}             // Chrome 일시정지 상태 해제
+    try{ synth.speak(u); }catch(e){ finish(); }
+  };
+  if(wasBusy) setTimeout(go, 90);                // Chrome: cancel 직후 speak가 무시되는 버그 회피
+  else go();
 }
 function stopSpeak(){
+  speakToken++;
   onSpeakEnd = null;
   if(speakGuard){ clearTimeout(speakGuard); speakGuard = null; }
-  if(synth) synth.cancel();
+  if(synth){ try{ synth.cancel(); }catch(e){} }
 }
 
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
@@ -1347,12 +1396,14 @@ function playIcon(){ return '<svg width="15" height="15" viewBox="0 0 24 24" fil
 function stopIcon(){ return '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'; }
 
 /* ---- step 2: roleplay ---- */
-let rpIdx = 0, recog = null;
+let rpIdx = 0, recog = null, rpNoAuto = false;
 function renderRoleplay(body, foot){
-  rpIdx = 0;
+  rpIdx = 0; rpNoAuto = false;
   const hint = document.createElement('p');
   hint.className='rp-hint';
-  hint.textContent = 'Sunny의 말을 듣고, 당신 차례가 되면 한국어 뜻을 보고 영어로 말해 보세요.';
+  hint.textContent = SR
+    ? 'Sunny가 말하면 마이크가 자동으로 켜져요. 한국어 뜻을 보고 영어로 말하면 Sunny가 이어서 대답해요.'
+    : 'Sunny의 말을 듣고, 당신 차례가 되면 한국어 뜻을 보고 영어로 말해 보세요.';
   body.appendChild(hint);
   const stage = document.createElement('div'); stage.className='rp-stage'; stage.id='rpStage';
   body.appendChild(stage);
@@ -1386,50 +1437,80 @@ function rpAdvance(stage){
       <div class="rp-fb"></div>`;
     const acts = card.querySelector('.rp-acts');
     const fb = card.querySelector('.rp-fb');
+    let advanced = false;
+    const goNext = ()=>{
+      if(advanced) return;
+      advanced = true;
+      if(recog){ try{recog.abort();}catch(e){} recog=null; }
+      card.classList.add('revealed');
+      card.querySelectorAll('button').forEach(b=>b.disabled=true);
+      card.style.opacity='.75'; card.style.borderColor='var(--line)';
+      rpIdx++; rpAdvance(stage);
+    };
+
+    let mic = null;
+    const startListening = (fromButton)=>{
+      if(!SR || advanced) return;
+      if(recog){ try{recog.abort();}catch(e){} recog=null; }
+      stopSpeak();
+      recog = new SR();
+      recog.lang='en-US'; recog.interimResults=false; recog.maxAlternatives=1;
+      if(mic){ mic.classList.add('live'); mic.textContent='듣는 중…'; }
+      recog.onresult = e=>{
+        const said = e.results[0][0].transcript;
+        const r = wordDiff(said, t.en);
+        card.classList.add('revealed');
+        const heard = `<span class="rp-heard">들린 말: “${said}”</span>`;
+        if(r.score>=50){
+          fb.className='rp-fb good';
+          fb.innerHTML=`${r.score}점! 좋아요, Sunny가 이어갈게요 <span class="shadow-target" style="display:block">${r.html}</span>${heard}`;
+          setTimeout(goNext, 1300);
+        } else {
+          fb.className='rp-fb retry';
+          fb.innerHTML=`${r.score}점 — 빨간 단어만 다시 말해볼까요? <span class="shadow-target" style="display:block">${r.html}</span>${heard}`;
+        }
+      };
+      recog.onend = ()=>{ recog=null; if(mic){ mic.classList.remove('live'); mic.textContent='다시 말하기'; } };
+      recog.onerror = e=>{
+        recog=null;
+        if(mic){ mic.classList.remove('live'); mic.textContent='말하기'; }
+        if(e && (e.error==='not-allowed' || e.error==='service-not-allowed')){
+          rpNoAuto = true;
+          if(!fromButton){ fb.className='rp-fb retry'; fb.textContent='마이크 권한을 허용하면 자동 대화가 돼요. 버튼을 눌러 말해보세요.'; }
+        }
+      };
+      try{ recog.start(); }catch(e){ recog=null; if(mic){ mic.classList.remove('live'); mic.textContent='말하기'; } }
+    };
 
     if(SR){
-      const mic = document.createElement('button');
+      mic = document.createElement('button');
       mic.className='chipbtn rec';
       mic.textContent='말하기';
       mic.addEventListener('click', ()=>{
         if(recog){ try{recog.abort();}catch(e){} recog=null; mic.classList.remove('live'); mic.textContent='말하기'; return; }
-        stopSpeak();
-        recog = new SR();
-        recog.lang='en-US'; recog.interimResults=false; recog.maxAlternatives=1;
-        mic.classList.add('live'); mic.textContent='듣는 중…';
-        recog.onresult = e=>{
-          const said = e.results[0][0].transcript;
-          const r = wordDiff(said, t.en);
-          card.classList.add('revealed');
-          const heard = `<span class="rp-heard">들린 말: “${said}”</span>`;
-          if(r.score>=60){ fb.className='rp-fb good'; fb.innerHTML=`${r.score}점! 아주 잘했어요 <span class="shadow-target" style="display:block">${r.html}</span>${heard}`; }
-          else { fb.className='rp-fb retry'; fb.innerHTML=`${r.score}점 — 초록 단어는 성공, 빨간 단어를 다시! <span class="shadow-target" style="display:block">${r.html}</span>${heard}`; }
-        };
-        recog.onend = ()=>{ recog=null; mic.classList.remove('live'); mic.textContent='말하기'; };
-        recog.onerror = ()=>{ recog=null; mic.classList.remove('live'); mic.textContent='말하기'; };
-        try{ recog.start(); }catch(e){ recog=null; mic.classList.remove('live'); mic.textContent='말하기'; }
+        rpNoAuto = false;
+        startListening(true);
       });
       acts.appendChild(mic);
     }
 
     const rev = document.createElement('button');
     rev.className='chipbtn'; rev.textContent='정답 보기';
-    rev.addEventListener('click', ()=>{ card.classList.add('revealed'); speak(t.en); });
+    rev.addEventListener('click', ()=>{
+      if(recog){ try{recog.abort();}catch(e){} recog=null; if(mic){ mic.classList.remove('live'); mic.textContent='말하기'; } }
+      card.classList.add('revealed'); speak(t.en);
+    });
     acts.appendChild(rev);
 
     const nxt = document.createElement('button');
     nxt.className='chipbtn primary'; nxt.textContent='다음';
-    nxt.addEventListener('click', ()=>{
-      if(recog){ try{recog.abort();}catch(e){} recog=null; }
-      card.classList.add('revealed');
-      card.querySelectorAll('button').forEach(b=>b.disabled=true);
-      card.style.opacity='.75'; card.style.borderColor='var(--line)';
-      rpIdx++; rpAdvance(stage);
-    });
+    nxt.addEventListener('click', goNext);
     acts.appendChild(nxt);
 
     stage.appendChild(card);
     card.scrollIntoView({block:'center', behavior:'smooth'});
+    /* 자동 통화 모드: Sunny 말이 끝나면 곧바로 듣기 시작 */
+    if(SR && !rpNoAuto){ setTimeout(()=>startListening(false), 600); }
   }
 }
 function matchScore(said, target){
@@ -1663,6 +1744,31 @@ $('#btnReset').addEventListener('click', ()=>{
   toast('기록을 초기화했어요');
   renderHome();
 });
+
+$('#btnSoundTest').addEventListener('click', ()=>{
+  const b = $('#btnSoundTest');
+  b.textContent = '재생 중…';
+  speak("Hi! This is Sunny. Can you hear me?", ()=>{ b.textContent = '테스트 ▶'; });
+  setTimeout(()=>{
+    if(synth && !synth.speaking && !synth.pending){
+      toast('소리가 안 나면: 무음 모드 해제, 또는 Chrome·Safari로 열어주세요');
+    }
+  }, 900);
+});
+
+/* 인앱 브라우저(카카오톡 등) 감지 → 안내 배너 */
+(function(){
+  const ua = navigator.userAgent || '';
+  const inApp = /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\/|DaumApps|everytimeApp|whale.*inapp/i.test(ua);
+  const noTTS = !synth;
+  if((inApp || noTTS) && !store.get('inappDismiss', false)){
+    $('#inappBanner').classList.add('show');
+  }
+  $('#inappClose').addEventListener('click', ()=>{
+    $('#inappBanner').classList.remove('show');
+    store.set('inappDismiss', true);
+  });
+})();
 
 /* init toggle state from storage */
 (function(){
