@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>톡톡영어 — Sunny와 5분 통화</title>
-<meta name="description" content="설치·로그인·비용 없이 브라우저에서 바로 — Sunny와 5분 영어 통화, 자동 롤플레이, 간격반복 복습, 나만의 상황 만들기.">
+<meta name="description" content="설치·로그인·비용 없이 — 매일 여행 3문장과 7일 누적 복습, Sunny와 5분 영어 통화, 간격반복 복습.">
 <meta property="og:title" content="톡톡영어 — Sunny와 5분 통화">
-<meta property="og:description" content="목표를 고르면 Sunny가 딱 맞는 5분 영어 통화를 추천해요.">
+<meta property="og:description" content="매일 3문장, 일주일 누적 복습, 5분 통화 연습.">
 <meta name="theme-color" content="#FAF6EF">
 </head>
 <body>
@@ -287,6 +287,17 @@
   .tc-sample .en{font-family:var(--font-en);font-weight:700;font-size:14.5px;color:var(--accent-deep)}
   .tc-sample .ko{font-size:12.5px;color:var(--sub)}
   .tc-done{font-size:12.5px;font-weight:800;color:var(--green)}
+  .t3-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .t3-row:last-of-type{border-bottom:0}
+  .t3-num{width:26px;height:26px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:12.5px}
+  .t3-txt{flex:1;min-width:0}
+  .t3-en{font-family:var(--font-en);font-weight:700;font-size:15.5px;color:var(--head)}
+  .t3-ko{font-size:12.5px;color:var(--sub)}
+  .t3-play{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent-soft);
+    color:var(--accent-deep);display:flex;align-items:center;justify-content:center}
+  .t3-foot{margin-top:12px}
+  .t3-note{font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center}
 
   /* ---------- pronunciation & review & stats ---------- */
   .w-hit{color:#2c6b3a;font-weight:700}
@@ -388,6 +399,14 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
         5분 통화 시작하기
       </button>
+    </div>
+
+    <div class="topic-card" id="t3Card">
+      <div class="tc-lab">오늘의 여행 3문장 <span class="tc-done" id="t3Done"></span></div>
+      <div id="t3List"></div>
+      <div class="t3-foot"><button class="btn-main" id="t3Review" style="width:100%"></button></div>
+      <div class="t3-note">매일 자정에 새 문장 3개가 도착해요 · 복습은 최근 7일치가 누적돼요</div>
+      <div id="t3Quiz"></div>
     </div>
 
     <div class="topic-card" id="topicCard">
@@ -904,6 +923,53 @@ const TOPICS = [
   {q:"What's something new you tried recently?", ko:"최근에 새로 시도해 본 것은?",
    s:{en:"I recently tried learning English with an app, and it's more fun than I expected.", ko:"최근에 앱으로 영어 공부를 시작했는데 생각보다 재밌어요."}}
 ];
+/* 여행 필수 문장 풀 — 매일 3개씩 로테이션, 최근 7일 누적 복습 */
+const TRAVEL3 = [
+  {en:"Water, please.", ko:"물 주세요."},
+  {en:"Chicken, please.", ko:"(기내식) 치킨으로 주세요."},
+  {en:"Could I have a blanket?", ko:"담요 하나 주시겠어요?"},
+  {en:"I'm here for travel.", ko:"여행하러 왔어요."},
+  {en:"I'll stay for five days.", ko:"5일 있을 거예요."},
+  {en:"I'm staying at the Grand Hotel.", ko:"그랜드 호텔에 묵어요."},
+  {en:"Check in, please.", ko:"체크인 해주세요."},
+  {en:"What time is breakfast?", ko:"조식은 몇 시예요?"},
+  {en:"Could I get extra towels?", ko:"수건 좀 더 주시겠어요?"},
+  {en:"Can you keep my luggage?", ko:"짐 좀 맡아주실 수 있나요?"},
+  {en:"A table for two, please.", ko:"두 명 자리 부탁해요."},
+  {en:"Menu, please.", ko:"메뉴판 주세요."},
+  {en:"I'll have this one.", ko:"이걸로 할게요."},
+  {en:"Check, please.", ko:"계산서 주세요."},
+  {en:"It was delicious!", ko:"정말 맛있었어요!"},
+  {en:"One iced americano, please.", ko:"아이스 아메리카노 한 잔이요."},
+  {en:"To go, please.", ko:"포장이요."},
+  {en:"Where is the bus stop?", ko:"버스 정류장이 어디예요?"},
+  {en:"Does this train go downtown?", ko:"이 기차 시내로 가나요?"},
+  {en:"One ticket, please.", ko:"표 한 장 주세요."},
+  {en:"Where should I get off?", ko:"어디서 내려야 해요?"},
+  {en:"Just looking, thanks.", ko:"그냥 구경 중이에요, 감사해요."},
+  {en:"Can I try this on?", ko:"입어봐도 되나요?"},
+  {en:"Do you take credit cards?", ko:"카드 되나요?"},
+  {en:"How much is it?", ko:"얼마예요?"},
+  {en:"Where is the restroom?", ko:"화장실이 어디예요?"},
+  {en:"Could you say that again, please?", ko:"다시 한번 말씀해 주시겠어요?"},
+  {en:"Help me, please!", ko:"도와주세요!"},
+  {en:"I lost my passport.", ko:"여권을 잃어버렸어요."},
+  {en:"I'm from Korea. Nice to meet you!", ko:"한국에서 왔어요. 만나서 반가워요!"}
+];
+function dayNum(){ return Math.floor((Date.now() - new Date().getTimezoneOffset()*60000) / 864e5); }
+function travel3(offset){
+  const base = (dayNum() - (offset||0)) * 3;
+  const N = TRAVEL3.length;
+  return [0,1,2].map(i=>TRAVEL3[((base+i)%N+N)%N]);
+}
+function travelWeek(){
+  const seen = new Set(), out = [];
+  for(let o=0; o<7; o++){
+    travel3(o).forEach(s=>{ if(!seen.has(s.en)){ seen.add(s.en); out.push(s); } });
+  }
+  return out;
+}
+
 function todayTopic(){
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
@@ -1344,6 +1410,7 @@ function renderHome(){
   }
   const fv = fluencyVal();
   $('#heroFluency').textContent = fv===null ? '–' : fv;
+  renderT3Card();
   renderTopicCard();
   const list = $('#sessionList'); list.innerHTML = '';
   trackOrder().forEach(tr=>{
@@ -1369,6 +1436,78 @@ function renderHome(){
     });
   });
   renderCustomList();
+}
+
+/* ================= 오늘의 여행 3문장 + 7일 누적 복습 ================= */
+function renderT3Card(){
+  const list = $('#t3List'); list.innerHTML = '';
+  travel3(0).forEach((s,i)=>{
+    const row = document.createElement('div'); row.className = 't3-row';
+    row.innerHTML = `<span class="t3-num">${i+1}</span>
+      <span class="t3-txt"><span class="t3-en">${s.en}</span><br><span class="t3-ko">${s.ko}</span></span>`;
+    const play = document.createElement('button');
+    play.className = 't3-play'; play.setAttribute('aria-label','듣기');
+    play.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+    play.addEventListener('click', ()=>speak(s.en));
+    row.appendChild(play);
+    list.appendChild(row);
+  });
+  const done = store.get('t3Done','') === ymd();
+  $('#t3Done').textContent = done ? '· 오늘 복습 완료 ✓' : '';
+  const week = travelWeek();
+  const btn = $('#t3Review');
+  btn.textContent = done ? `한 번 더 복습하기 (${week.length}문장)` : `7일 누적 복습 시작 (${week.length}문장)`;
+  btn.onclick = ()=>startT3Quiz(week);
+  $('#t3Quiz').innerHTML = '';
+}
+function startT3Quiz(items){
+  const box = $('#t3Quiz');
+  const pool = TRAVEL3.map(s=>s.en);
+  const qs = items.slice().sort(()=>Math.random()-.5);
+  let idx = 0, ok = 0;
+  $('#t3List').style.display = 'none';
+  document.querySelector('#t3Card .t3-foot').style.display = 'none';
+  const draw = ()=>{
+    stopSpeak();
+    if(idx >= qs.length){
+      addScore(ok / qs.length * 100);
+      store.set('t3Done', ymd());
+      box.innerHTML = `<div class="rq-result" style="padding-top:16px"><b>누적 복습 완료! ${ok} / ${qs.length}</b>
+        <span>내일 새 문장 3개와 함께 또 만나요</span></div>`;
+      const back = document.createElement('button');
+      back.className = 'chipbtn primary'; back.style.cssText = 'margin:12px auto 4px;display:block';
+      back.textContent = '닫기';
+      back.addEventListener('click', ()=>{
+        $('#t3List').style.display = '';
+        document.querySelector('#t3Card .t3-foot').style.display = '';
+        renderT3Card();
+      });
+      box.appendChild(back);
+      toast('7일 누적 복습을 마쳤어요!');
+      return;
+    }
+    const it = qs[idx];
+    box.innerHTML = `<div class="rq-prog" style="margin-top:14px">누적 복습 ${idx+1} / ${qs.length}</div>
+      <div class="rq-q" style="font-size:16.5px">"${it.ko.replace(/\.$/,'')}"<br>영어로 하면?</div>`;
+    const opts = document.createElement('div'); opts.className = 'qz-opts';
+    const wrong = pool.filter(p=>p!==it.en).sort(()=>Math.random()-.5).slice(0,2);
+    const cs = [it.en, ...wrong].sort(()=>Math.random()-.5);
+    cs.forEach(c=>{
+      const o = document.createElement('button');
+      o.className = 'qz-opt'; o.style.fontSize = '14.5px'; o.textContent = c;
+      o.addEventListener('click', ()=>{
+        if(opts.dataset.lock) return;
+        opts.dataset.lock = '1';
+        if(c === it.en){ o.classList.add('ok'); ok++; }
+        else{ o.classList.add('no'); Array.from(opts.children).find(x=>x.textContent===it.en).classList.add('ok'); }
+        speak(it.en);
+        setTimeout(()=>{ idx++; draw(); }, 1200);
+      });
+      opts.appendChild(o);
+    });
+    box.appendChild(opts);
+  };
+  draw();
 }
 
 /* ================= 오늘의 토픽 (자유 스피킹) ================= */
